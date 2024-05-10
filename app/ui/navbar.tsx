@@ -23,19 +23,24 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
             alt="placeholder"
           />
         </li>
-        <li className={`${styles.navItem} ${currentPage === "home" ? styles.navPage : undefined}`}>
-          <Link href="/" className={`${currentPage !== "home" ? styles.navLink : undefined}`}>
+        <li
+          className={`${styles.navItem} ${currentPage === "home" ? styles.navPage : undefined}`}
+        >
+          <Link
+            href="/"
+            className={`${currentPage !== "home" ? styles.navLink : undefined}`}
+          >
             Home
           </Link>
         </li>
-        <li className={`${styles.navItem} ${currentPage === "collection" ? styles.navPage : undefined}`}>
-          <Link href="/collection" className={`${currentPage !== "collection" ? styles.navLink : undefined}`}>
+        <li
+          className={`${styles.navItem} ${currentPage === "collection" ? styles.navPage : undefined}`}
+        >
+          <Link
+            href="/collection"
+            className={`${currentPage !== "collection" ? styles.navLink : undefined}`}
+          >
             Collection
-          </Link>
-        </li>
-        <li className={`${styles.navItem} ${currentPage === "artist" ? styles.navPage : undefined}`}>
-          <Link href="/artist" className={`${currentPage !== "artist" ? styles.navLink : undefined}`}>
-            Artist
           </Link>
         </li>
       </ul>

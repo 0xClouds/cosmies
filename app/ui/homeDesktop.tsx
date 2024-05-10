@@ -31,21 +31,20 @@ const HomeDesktop: React.FC = () => {
               onMouseLeave={() => setColor(false)}
               onClick={login}
             >
-              Connect Here
+              Click Here to Play A Game
               <span className={styles.rightArrow}>
                 <ArrowRight fill={color ? "green" : "blue"} />
               </span>
             </button>
-            <div style={{ marginTop: "100px" }}>
+            <div style={{ marginTop: "20px" }}>
               <button
                 onMouseEnter={() => setColor(true)}
                 onMouseLeave={() => setColor(false)}
                 onClick={() => {
-                  console.log("Attempting to log out");
-                  logout;
+                  console.log("Connect here to mint a cosmie");
                 }}
               >
-                UN-Connect Here
+                Mint Here
                 <span className={styles.leftArrow}>
                   <ArrowRight fill={color ? "orange" : "white"} />
                 </span>

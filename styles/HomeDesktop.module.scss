@@ -4,11 +4,15 @@
   display: flex;
   flex-direction: row;
   width: 50%;
+  font-family: var(--main-font); /* Using the custom property */
+  font-weight: var(--font-weight-bold);
   .mainInfo {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
+    font-family: var(--main-font); /* Using the custom property */
+    font-weight: var(--font-weight-bold);
 
     .infoContainer {
       display: flex;
