@@ -1,0 +1,23 @@
+.hamburgerWrapper {
+  background: white;
+  .hamburgerBtn {
+    border: none;
+    background: none;
+    .hamburger {
+      background-color: black;
+      width: 20px;
+      height: 2px;
+      margin-bottom: 0.3rem;
+      transition: 1s;
+    }
+    .active:nth-child(1) {
+      transform: rotate(123deg) translateY(-10px);
+    }
+    .active:nth-child(2) {
+      transform: translateX(100px);
+    }
+    .active:nth-child(3) {
+      transform: rotate(-126deg) translateY(12px) translateX(1px);
+    }
+  }
+}

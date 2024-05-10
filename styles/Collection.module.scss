@@ -1,0 +1,116 @@
+@import "./variables.scss";
+
+.main {
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+
+  .desktopNav {
+    display: none;
+  }
+
+  .header {
+    margin-top: 5rem;
+    padding: 0 1rem;
+
+    p {
+      font-size: 0.7rem;
+      color: $lightColor;
+    }
+  }
+
+  .imagesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    .images {
+      width: 45%;
+
+      img {
+        border-radius: 10px;
+        padding-bottom: 2rem;
+        transition: transform 0.5s;
+      }
+      .cosmies {
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .cosmies:hover {
+        border: 2px solid black !important;
+
+        img:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      .names {
+        display: flex;
+        flex-direction: row;
+        margin: 1rem 0;
+
+        .arrowHide {
+          visibility: hidden;
+          transition: opacity 2s ease-in-out;
+          opacity: 0;
+        }
+        .arrowShow {
+          visibility: visible;
+          transition: opacity 0.4s ease-in-out;
+          transition: transform 0.4s ease-in-out;
+          opacity: 1;
+          transform: translateX(10px);
+        }
+      }
+    }
+  }
+
+  .imagesContainer:hover {
+    cursor: pointer;
+  }
+}
+
+@media all and (min-width: 1200px) {
+  .main {
+    .desktopNav {
+      display: flex;
+      flex-direction: row;
+
+      .buttonContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .twitterLink {
+          margin-right: 3rem;
+        }
+        .firstButton {
+          margin-right: 1em;
+          box-shadow: 0 5px 10px rgb(154 160 185 / 50%),
+            0 15px 40px rgb(166 173 201 / 20%);
+        }
+      }
+    }
+    .mobileNav {
+      display: none;
+    }
+
+    .header {
+      margin: 0;
+      padding: 0 3rem;
+    }
+    .imagesContainer {
+      margin-top: 2rem;
+
+      .images {
+        width: 17%;
+
+        img {
+          border: 1px solid black;
+        }
+      }
+    }
+  }
+}

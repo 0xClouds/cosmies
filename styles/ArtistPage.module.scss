@@ -1,0 +1,16 @@
+.mainContainer{
+    .desktopNav{
+        display:none;
+    }
+}
+
+@media all and (min-width:1200px){
+    .mainContainer{
+        .mobileNav{
+            display: none;
+        }
+        .desktopNav{
+            display: block;
+        }
+    }
+}

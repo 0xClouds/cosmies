@@ -1,0 +1,19 @@
+@import "./variables.scss";
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8em;
+  position: absolute;
+  top: 6%;
+  left: 70%;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+
+  .firstButton {
+    margin-right: 1em;
+    box-shadow: 0 5px 10px rgb(154 160 185 / 50%),
+      0 15px 40px rgb(166 173 201 / 20%);
+  }
+}

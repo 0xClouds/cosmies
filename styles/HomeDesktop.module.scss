@@ -1,0 +1,45 @@
+@import "./variables.scss";
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  .mainInfo {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .infoContainer {
+      display: flex;
+      flex-direction: column;
+
+      margin: 0 5rem;
+      height: 80%;
+      flex: 2;
+
+      .infoHeader {
+        margin-top: 3em;
+        font-size: 2.75em;
+        font-weight: $normal;
+        line-height: 60px;
+      }
+
+      .infoText {
+        color: #615a71;
+        font-family: $secondary-font;
+        font-style: normal;
+        line-height: 28px;
+        font-weight: $bold;
+        font-size: 0.875em;
+      }
+
+      .decoding {
+        display: flex;
+        justify-content: row;
+        align-items: center;
+        font-family: $secondary-font;
+      }
+    }
+  }
+}

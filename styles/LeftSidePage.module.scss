@@ -1,0 +1,11 @@
+.leftSidePage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100%;
+  max-width: 50%;
+
+  .carousel {
+    height: 100%;
+  }
+}

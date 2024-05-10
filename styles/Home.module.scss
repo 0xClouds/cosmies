@@ -1,0 +1,21 @@
+@import "./variables.scss";
+
+.mainContainer {
+  .desktopPage {
+    height: 100%;
+    display: none;
+  }
+}
+
+@media all and (min-width: 1200px) {
+  .mainContainer {
+    .desktopPage {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+    }
+    .mobilePage {
+      display: none;
+    }
+  }
+}

@@ -1,11 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@700&display=swap");
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --main-font: "Press Start 2P", cursive;
+  --secondary-font: "Space Mono", monospace;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --light-color: #615a71;
 }
 
 @media (prefers-color-scheme: dark) {

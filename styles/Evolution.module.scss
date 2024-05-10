@@ -1,0 +1,73 @@
+.jambis {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  .jambi {
+    position: absolute;
+    left: 0;
+
+    img {
+      -webkit-animation-name: jambiEvolution;
+      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-duration: 6s;
+      animation-name: jambiEvolution;
+      animation-iteration-count: infinite;
+      animation-duration: 9s;
+    }
+  }
+  .first {
+    img {
+      animation-delay: 0s;
+    }
+  }
+
+  .second {
+    img {
+      opacity: 0;
+      animation-delay: 3s;
+    }
+  }
+
+  .third {
+    img {
+      opacity: 0;
+      animation-delay: 6s;
+    }
+  }
+}
+
+@-webkit-keyframes jambiEvolution {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 1;
+  }
+  53% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes jambiEvolution {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 1;
+  }
+  53% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
