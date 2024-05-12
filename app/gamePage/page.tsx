@@ -42,7 +42,7 @@ export default function Home() {
         const smartAccountClient = await createLightAccountAlchemyClient({
           signer: privySigner,
           chain: sepolia,
-          apiKey: "x_zsSJVMWczitDP3lgc76zmihueFWyDA",
+          apiKey: "",
         });
 
         setSmartAccountClient(smartAccountClient);
