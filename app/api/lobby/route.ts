@@ -7,30 +7,13 @@ enum gameStatus {
   "DONE" = 2,
 }
 
-async function findPlayerId(publicAddress: string) {
-  const { data, error } = await supabase
-    .from("users")
-    .select("id")
-    .eq("public_address", publicAddress)
-    .single(); // Use 'single()' if you expect only one result
-
-  if (error) {
-    console.error("Error finding game:", error);
-    return null;
-  }
-
-  return data.id;
-}
-
 export async function POST(req: Request, res: Response) {
   try {
     const user = await req.json();
-    const id = await findPlayerId(user.publicAddress);
     const { data, error } = await supabase.from("lobby").insert({
       public_address: user.publicAddress,
-      created_at: new Date(),
       status: gameStatus.WAITING,
-      id: id,
+      created_at: new Date(),
     });
 
     //Supabse Error

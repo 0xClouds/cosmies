@@ -15,12 +15,10 @@ const HomeDesktop: React.FC = () => {
   const [color, setColor] = useState(false);
 
   const handlePlayGame = async () => {
-    if (authenticated) {
-      const wallet = wallets[0];
-      await axios.post("http://localhost:3000/api/lobby", {
-        publicAddress: wallet.address,
-      });
-    }
+    const wallet = wallets[0];
+    await axios.post("http://localhost:3000/api/lobby", {
+      publicAddress: wallet.address,
+    });
   };
 
   return (

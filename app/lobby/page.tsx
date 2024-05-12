@@ -14,6 +14,7 @@ export default function Page() {
     console.log("im here");
 
     const handleInserts = (payload: any) => {
+      //Listen to table
       console.log("Change received!", payload);
     };
 
