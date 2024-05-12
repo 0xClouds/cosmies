@@ -1,0 +1,43 @@
+.mobileNavWrapper {
+    z-index: 2;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 100%;
+    box-shadow: 0 5px 10px rgb(154 160 185 / 50%),
+        0 15px 40px rgb(166 173 201 / 20%);
+
+    .navHeader {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navList {
+        display: flex;
+        justify-content: center;
+        font-size: 0.8rem;
+
+        ul {
+            list-style: none;
+
+            li {
+                margin: 1rem 0;
+            }
+
+            .underlined {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .active {
+        display: none;
+    }
+
+    .hamburger {
+        margin-right: 1rem;
+    }
+}

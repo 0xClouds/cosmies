@@ -1,0 +1,73 @@
+@import "./variables.scss";
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 5rem 1rem 0 1rem;
+  .header {
+    span {
+      font-family: $secondary-font;
+      font-weight: $bold;
+      font-size: 0.9rem;
+      color: $lightColor;
+    }
+    // margin-bottom: 0.5rem;
+  }
+
+  .about {
+    .infoContainer {
+      .artistName {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      p {
+        font-family: $secondary-font;
+        font-weight: $bold;
+        color: $lightColor;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media all and (min-width: 1200px){
+  .mainContainer{
+    padding:0 2rem;
+    height:100%;
+
+    .about{
+      display: flex;
+      flex-direction: row;
+      height:50%;
+      gap:2rem;
+      margin-top: 2rem;
+
+      img{
+        border-radius: 10px;
+      }
+
+    
+     .infoContainer{
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      margin-top:2rem;
+  
+      .artistName{
+        justify-content: flex-start;
+      }
+      
+      
+      .artistDescription{
+        font-size: .75rem;
+        width:80%;
+        margin-bottom: 5rem;
+        
+      }
+     }
+      
+    }
+  }
+}

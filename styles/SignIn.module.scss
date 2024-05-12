@@ -1,0 +1,68 @@
+/* SignIn.css */
+
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; /* This sets the height of the container to the full viewport height */
+  width: 100%; /* This ensures the container takes full width of the viewport */
+  background-color: #f4f4f4; /* Background color, can be changed as needed */
+}
+
+.infoContainer {
+  margin-top: 0;
+  text-align: center; /* Center-aligns the text elements */
+}
+
+.infoHeader {
+  font-family: var(--main-font);
+  font-size: 2rem; /* Example size, adjust as needed */
+  color: #333; /* Dark grey color for the text */
+  margin-bottom: 20px; /* Space between the header and the paragraph */
+}
+
+.infoText {
+  margin-top: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  color: #666; /* Lighter grey color for paragraph */
+  margin-top: 5px;
+  margin-bottom: 30px; /* Space between the paragraph and the button */
+}
+
+.button {
+  font-family: var(--main-font); /* Using the custom property */
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Centers the items horizontally within the button */
+  justify-content: center; /* Aligns items along the center line vertically */
+  background-color: transparent; /* Transparent background to let button stand out */
+  color: #007bff; /* Blue color for text, adjust as needed */
+  /*border: 2px solid #007bff;  Border color matches text color */
+  padding: 10px 15px; /* Padding inside the button */
+  font-size: 1rem;
+  cursor: pointer; /* Cursor indicates the button is clickable */
+  outline: none; /* Removes the default focus outline */
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Smooth transition for hover effects */
+  border-radius: 5%;
+}
+
+.button:hover {
+  background-color: #007bff; /* Background color changes on hover */
+  color: #fff; /* Text color changes to white on hover */
+}
+
+.rightArrow {
+  margin-top: 5px; /* Adds space between the text and the arrow icon */
+}
+
+.navImg {
+  margin-bottom: 5px; /* Adjust this value to reduce the space */
+  display: block;
+}
+
+/* Arrow color changes are controlled directly in the component */

@@ -1,0 +1,36 @@
+@import "./variables.scss";
+
+.button {
+  background-color: #fff;
+  width: 200px;
+  padding: 1rem 1.25rem;
+  font-size: 0.7rem;
+  font-family: $main-font;
+  border: 2px solid black;
+  -webkit-transition: width 350ms linear;
+  -moz-transition: width 350ms linear;
+  -ms-transition: width 350ms linear;
+  -o-transition: width 350ms linear;
+  transition: width 350ms linear;
+  border: 2px solid #000000;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.24);
+  border-radius: 4px;
+
+  .icon {
+    margin-right: 1rem;
+  }
+  .rightArrow {
+    margin-left: 1rem;
+  }
+}
+
+.button:hover {
+  background-color: black;
+  color: #fff;
+  width: 220px;
+  cursor: pointer;
+}
+
+.button:active {
+  transform: translateY(4px);
+}

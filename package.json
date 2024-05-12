@@ -9,10 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@alchemy/aa-accounts": "^3.12.1",
+    "@alchemy/aa-alchemy": "^3.12.1",
+    "@alchemy/aa-core": "^3.12.1",
+    "@privy-io/react-auth": "^1.64.0",
     "@tanstack/react-query": "^5.35.1",
+    "embla-carousel-autoplay": "^8.0.4",
+    "embla-carousel-react": "^8.0.4",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "sass": "^1.77.0",
     "viem": "^2.10.1",
     "wagmi": "^2.8.1"
   },
@@ -20,9 +27,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@typescript-eslint/parser": "^5.0.1",
+    "eslint": "^8.52.0",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
+    "prettier": "^3.1.0",
+    "prettier-eslint": "^16.1.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
