@@ -1,7 +1,7 @@
 import supabase from "../../../data/supabase";
 import { NextApiRequest, NextApiResponse } from "next";
 
-enum gameStatus {
+enum lobbyStatus {
   "WAITING" = 0,
   "PLAYING" = 1,
   "DONE" = 2,
@@ -12,8 +12,7 @@ export async function POST(req: Request, res: Response) {
     const user = await req.json();
     const { data, error } = await supabase.from("lobby").insert({
       public_address: user.publicAddress,
-      status: gameStatus.WAITING,
-      created_at: new Date(),
+      status: lobbyStatus.WAITING,
     });
 
     //Supabse Error
@@ -23,6 +22,26 @@ export async function POST(req: Request, res: Response) {
     }
 
     return Response.json("Succesfully added user");
+  } catch (e) {
+    console.error(e);
+    return Response.error();
+  }
+}
+
+//how can we add more Get functions in this page
+export async function GET(req: Request, res: Response) {
+  try {
+    console.log("HERE");
+    const { data, error } = await supabase
+      .from("lobby")
+      .select("public_address,created_at")
+      .eq("status", lobbyStatus.WAITING);
+
+    if (error) {
+      console.log(error);
+      return Response.json("Supabase Error Get in lobby");
+    }
+    return Response.json(data);
   } catch (e) {
     console.error(e);
     return Response.error();

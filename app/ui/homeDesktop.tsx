@@ -6,6 +6,7 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // Assuming Navbar and Button are typed in their respective files
 const HomeDesktop: React.FC = () => {
@@ -14,11 +15,23 @@ const HomeDesktop: React.FC = () => {
 
   const [color, setColor] = useState(false);
 
+  const router = useRouter();
+
   const handlePlayGame = async () => {
     const wallet = wallets[0];
-    await axios.post("http://localhost:3000/api/lobby", {
-      publicAddress: wallet.address,
-    });
+    console.log("handle play game");
+    try {
+      if (wallet) {
+        await axios.post("http://localhost:3000/api/lobby", {
+          publicAddress: wallet.address,
+        });
+        router.push("/lobby");
+      } else {
+        console.log("No Wallets");
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

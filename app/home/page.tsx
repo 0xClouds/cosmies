@@ -42,7 +42,7 @@ export default function Home() {
         const smartAccountClient = await createLightAccountAlchemyClient({
           signer: privySigner,
           chain: sepolia,
-          apiKey: process.env.ALCHEMY_API_KEY,
+          apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
         });
 
         setSmartAccountClient(smartAccountClient);
@@ -51,8 +51,6 @@ export default function Home() {
 
     setupClient();
   }, []);
-
-  console.log(smartAccountClient);
 
   return (
     <div className={styles.mainContainer}>

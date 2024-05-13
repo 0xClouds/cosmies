@@ -14,9 +14,13 @@ const SignIn: React.FC = () => {
   const { ready, authenticated } = usePrivy();
 
   const addUser = async (publicAddress: string) => {
-    await axios.post("http://localhost:3000/api/user", {
-      publicAddress: publicAddress,
-    });
+    try {
+      await axios.post("http://localhost:3000/api/user", {
+        publicAddress: publicAddress,
+      });
+    } catch (e) {
+      console.log("user probably aready added");
+    }
   };
 
   const { login } = useLogin({
