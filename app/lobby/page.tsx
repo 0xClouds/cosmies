@@ -2,8 +2,10 @@
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
+import router from "next/navigation";
 import { useEffect } from "react";
 
+//todo-Move these out?
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
 
 const SUPABASE_KEY =
@@ -22,6 +24,7 @@ export default function Page() {
       console.log("Change received!", payload);
       const players = await axios.get("http://localhost:3000/api/lobby", {});
       console.log("the players", players);
+      console.log("connected Plyer", wallets[0].address);
       if (players.data.length >= 2) {
         players.data.sort((a, b) => a.created_at - b.created_at);
         const oldestPlayerName = players.data[0].public_address;
@@ -32,6 +35,7 @@ export default function Page() {
             player2: currentPlayer,
           });
           console.log("the result", result);
+          // router.push("/gameRoom");
         }
       }
     };
@@ -50,5 +54,5 @@ export default function Page() {
     // };
   }, [supabase]);
 
-  return <div> Hello World</div>;
+  return <div> Hello Welcome to the lobby</div>;
 }

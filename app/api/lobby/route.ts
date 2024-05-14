@@ -31,7 +31,6 @@ export async function POST(req: Request, res: Response) {
 //how can we add more Get functions in this page
 export async function GET(req: Request, res: Response) {
   try {
-    console.log("HERE");
     const { data, error } = await supabase
       .from("lobby")
       .select("public_address,created_at")

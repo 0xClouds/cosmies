@@ -19,21 +19,27 @@ const SignIn: React.FC = () => {
         publicAddress: publicAddress,
       });
     } catch (e) {
-      console.log("user probably aready added");
+      console.log("user probably already added");
     }
   };
 
   const { login } = useLogin({
-    onComplete: (
+    onComplete: async (
       user,
       isNewUser,
       wasAlreadyAuthenticated,
       loginMethod,
       linkedAccount
     ) => {
+      await user;
+      console.log("user", user);
       if (user.wallet?.address) {
         addUser(user.wallet.address);
+        console.log("added users");
       }
+      console.log("BEfore the push", user);
+      console.log("BEfore the push", user.wallet);
+
       router.push("/home");
     },
     onError: (error) => {
