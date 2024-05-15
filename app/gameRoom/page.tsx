@@ -17,6 +17,8 @@ export default function Page() {
   const { wallets } = useWallets();
   const [wallet, setWallet] = useState(""); // Initialize with empty string or null
 
+  const [lifeAmount, setLifeAmount] = useState(100);
+
   useEffect(() => {
     // Only update wallet when wallets are available and the first wallet has an address
     if (wallets.length > 0 && wallets[0].address) {
@@ -38,17 +40,16 @@ export default function Page() {
     }
   }, [wallets]);
 
-  const room = supabase.channel(roomName!, {
-    config: {
-      broadcast: { self: true },
-    },
-  });
+  const room = supabase.channel(roomName!);
 
   useEffect(() => {
     if (wallet && !isSubscribed.current) {
       const subscribeToRoom = () => {
         room
           .on("broadcast", { event: "got a message" }, (payload) => {
+            const damage = Number(payload.payload);
+            console.log("The damge is: ", damage);
+            setLifeAmount(lifeAmount - damage);
             console.log("Received message:", payload);
           })
           .subscribe();
@@ -72,7 +73,7 @@ export default function Page() {
       room
         .send({
           type: "broadcast",
-          payload: { message },
+          payload: message,
           sender: wallet,
           event: "got a message",
         })
@@ -96,7 +97,9 @@ export default function Page() {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type your message here"
       />
+      <p></p>
       <button onClick={sendMessage}>Send Message</button>
+      <h2>Life: {lifeAmount}</h2>
       {/* Display messages here */}
     </div>
   );
