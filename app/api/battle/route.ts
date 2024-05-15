@@ -63,7 +63,7 @@ export async function POST(req: Request, res: Response) {
     // Return room information
     return Response.json({
       message: "Successfully updated player status and moved to battle room",
-      room: roomName,
+      roomName: roomName,
     });
   } catch (e) {
     console.error(e);

@@ -36,7 +36,9 @@ export default function Page() {
             player2: currentPlayer,
           });
           console.log("the result", result);
-          router.push(`/gameRoom?name=${encodeURIComponent(result.data.room)}`);
+          router.push(
+            `/gameRoom?name=${encodeURIComponent(result.data.roomName)}`
+          );
         }
       }
     };
