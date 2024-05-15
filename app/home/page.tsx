@@ -12,8 +12,7 @@ import { createWalletClient, custom } from "viem";
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useSmartAccountClient } from "../contexts/SmartAccountClientContext";
-import { useConnectWallet, useWallets } from "@privy-io/react-auth";
-import { z, ZodError } from "zod";
+import { useWallets } from "@privy-io/react-auth";
 
 export default function Home() {
   const { ready, authenticated } = usePrivy();

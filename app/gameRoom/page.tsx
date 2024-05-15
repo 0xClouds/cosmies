@@ -3,7 +3,7 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 //todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -15,11 +15,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export default function Page() {
   const router = useRouter();
-  const { roomId } = router.query;
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
+  console.log("the battle room", name);
+
   //const [roomChannel, setRoomChannel] = useState(null);
   //const room = supabase.channel(roomId);
-  console.log(roomId);
-  console.log(roomId);
+
   //   useEffect(() => {
   //     if (roomId) {
   //       // Connect to the Supabase real-time channel
@@ -49,7 +51,7 @@ export default function Page() {
   return (
     <div>
       <h1>Battle Room</h1>
-      {roomId && <p>Room ID: {roomId}</p>}
+      {name && <p>Room ID: {name}</p>}
       {/* Add communication UI here */}
     </div>
   );

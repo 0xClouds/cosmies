@@ -2,7 +2,7 @@
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
-import router from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 //todo-Move these out?
@@ -15,6 +15,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export default function Page() {
   const { wallets } = useWallets();
+  const router = useRouter();
 
   useEffect(() => {
     console.log("im here");
@@ -35,8 +36,21 @@ export default function Page() {
             player2: currentPlayer,
           });
           console.log("the result", result);
-          // router.push("/gameRoom");
+          router.push(`/gameRoom?name=${encodeURIComponent(result.data.room)}`);
         }
+      }
+    };
+
+    const handleBattleInserts = async (payload: any) => {
+      console.log("In the battle inserts", payload);
+      const battle = payload.new;
+      console.log("The opponent is ", battle);
+      if (
+        battle?.opponent === wallets[0].address ||
+        battle?.player === wallets[0].address
+      ) {
+        console.log("I pushed");
+        router.push(`/gameRoom?name=${encodeURIComponent(battle.roomName)}`);
       }
     };
 
@@ -49,9 +63,18 @@ export default function Page() {
       )
       .subscribe();
     handleInserts({});
-    // return () => {
-    //   supabase.removeChannel(channel);
-    // };
+
+    supabase
+      .channel("battles")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "battles" },
+        handleBattleInserts
+      )
+      .subscribe();
+    handleBattleInserts({});
+
+    // Clean up the subscription
   }, [supabase]);
 
   return <div> Hello Welcome to the lobby</div>;
