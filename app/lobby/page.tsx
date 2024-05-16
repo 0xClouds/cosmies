@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import styles from "../../styles/RotatingBox.module.scss";
+import RotatingBox from "../ui/rotatingBox";
 
 //todo-Move these out?
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -79,5 +81,5 @@ export default function Page() {
     // Clean up the subscription
   }, [supabase]);
 
-  return <div> Hello Welcome to the lobby</div>;
+  return <RotatingBox></RotatingBox>;
 }

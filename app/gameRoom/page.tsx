@@ -1,11 +1,9 @@
 "use client";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GameRoom from "../ui/gameRoom";
-import Background from "../ui/background";
 
 //todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -51,10 +49,8 @@ export default function Page() {
         // Subscribe to "got a message" events
         room
           .on("broadcast", { event: "got a message" }, (payload) => {
-            console.log("Received message: ", payload);
             if (payload.event === "got a message") {
               const damage = Number(payload.payload.damage);
-              console.log("Damage received: ", damage);
               setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
             }
           })
@@ -64,6 +60,9 @@ export default function Page() {
         room.on("broadcast", { event: "life-update" }, (payload) => {
           if (payload.payload.sender !== wallet) {
             setEnemyLife(payload.payload.life);
+            if (enemyLife <= 0) {
+              router.push("/winningPage");
+            }
           }
         });
 
@@ -102,6 +101,9 @@ export default function Page() {
   };
 
   useEffect(() => {
+    if (lifeAmount <= 0) {
+      router.push("/losePage");
+    }
     sendLifeAmount();
   }, [lifeAmount]);
 
