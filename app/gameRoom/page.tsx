@@ -18,6 +18,7 @@ export default function Page() {
   const [wallet, setWallet] = useState(""); // Initialize with empty string or null
 
   const [lifeAmount, setLifeAmount] = useState(100);
+  const [enemyLife, setEnemyLife] = useState(100);
 
   useEffect(() => {
     // Only update wallet when wallets are available and the first wallet has an address
@@ -45,14 +46,25 @@ export default function Page() {
   useEffect(() => {
     if (wallet && !isSubscribed.current) {
       const subscribeToRoom = () => {
+        // Subscribe to "got a message" events
         room
           .on("broadcast", { event: "got a message" }, (payload) => {
-            const damage = Number(payload.payload);
-            console.log("The damge is: ", damage);
-            setLifeAmount(lifeAmount - damage);
-            console.log("Received message:", payload);
+            console.log("Received message: ", payload);
+            if (payload.event === "got a message") {
+              const damage = Number(payload.payload.damage);
+              console.log("Damage received: ", damage);
+              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
+            }
           })
           .subscribe();
+
+        // Subscribe to "life-update" events
+        room.on("broadcast", { event: "life-update" }, (payload) => {
+          if (payload.payload.sender !== wallet) {
+            setEnemyLife(payload.payload.life);
+          }
+        });
+
         isSubscribed.current = true; // Mark as subscribed
       };
 
@@ -73,7 +85,7 @@ export default function Page() {
       room
         .send({
           type: "broadcast",
-          payload: message,
+          payload: { damage: message },
           sender: wallet,
           event: "got a message",
         })
@@ -83,6 +95,28 @@ export default function Page() {
         })
         .catch((error) => {
           console.log("Error sending message:", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    sendLifeAmount();
+  }, [lifeAmount]);
+
+  const sendLifeAmount = () => {
+    if (isSubscribed.current && wallet) {
+      room
+        .send({
+          type: "broadcast",
+          payload: { life: lifeAmount, sender: wallet },
+          sender: wallet, //todo for some reason this isn't working with this message, but working with the other one???
+          event: "life-update",
+        })
+        .then(() => {
+          console.log("Life amount sent successfully w: ", wallet);
+        })
+        .catch((error) => {
+          console.log("Error sending life amount:", error);
         });
     }
   };
@@ -101,6 +135,7 @@ export default function Page() {
       <button onClick={sendMessage}>Send Message</button>
       <h2>Life: {lifeAmount}</h2>
       {/* Display messages here */}
+      <h2>Enemy Life: {enemyLife}</h2>
     </div>
   );
 }
