@@ -36,7 +36,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.background}></div>
+      <div className={styles.background}></div> {/* Background div */}
       <div className={styles.playerInformation}>
         <h1>IT'S MATCH TIME</h1>
         <h1>Battle Room</h1>
@@ -67,7 +67,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
           </button>
         ))}
         <button
-          className={styles.button}
+          className={stylesButton.button}
           onClick={() => console.log("Implement the runaway button")}
         >
           Run Away

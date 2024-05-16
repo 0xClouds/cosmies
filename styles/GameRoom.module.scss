@@ -1,10 +1,10 @@
 @import "./variables.scss";
 
 @keyframes moveBackground {
-  0% {
+  from {
     background-position: 0 0;
   }
-  100% {
+  to {
     background-position: -1000px 0; /* Adjust this value based on your image width */
   }
 }
@@ -29,15 +29,17 @@
   height: 100%;
   background-image: url("/images/beachBack.png"); /* Use an absolute path to test */
   background-repeat: repeat-x;
-  animation: moveBackground 10s linear infinite;
+  animation: moveBackground 20s linear infinite;
   z-index: -1; /* Ensure the background is behind other content */
 }
 
 .buttonContainer {
+  position: absolute; /* Position the element absolutely */
+  bottom: 0; /* Align to the bottom of the container */
+  width: 100%; /* Full width */
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
   padding: 20px;
   box-sizing: border-box;
 }
@@ -58,7 +60,18 @@
 }
 
 .playerInformation {
+  position: absolute; /* Position the element absolutely */
+  top: 0; /* Align to the top of the container */
+  left: 0; /* Align to the left of the container */
   display: flex;
-  justify-content: center;
-  flex-direction: row;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the start of the container */
+  gap: 10px; /* Optional: add space between the elements */
+  padding: 20px; /* Optional: add padding around the container */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Optional: add a semi-transparent background for readability */
 }
