@@ -1,0 +1,64 @@
+@import "./variables.scss";
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -1000px 0; /* Adjust this value based on your image width */
+  }
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative; /* Ensure positioning context for child elements */
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/images/beachBack.png"); /* Use an absolute path to test */
+  background-repeat: repeat-x;
+  animation: moveBackground 10s linear infinite;
+  z-index: -1; /* Ensure the background is behind other content */
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.leftArrow {
+  margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.playerInformation {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

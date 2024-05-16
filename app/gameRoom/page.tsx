@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import GameRoom from "../ui/gameRoom";
+import Background from "../ui/background";
 
 //todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -122,20 +124,14 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <h1>Battle Room</h1>
-      {roomName && <p>Room ID: {roomName}</p>}
-      <h3>The user wallet for this is {wallet}</h3>
-      <input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your message here"
-      />
-      <p></p>
-      <button onClick={sendMessage}>Send Message</button>
-      <h2>Life: {lifeAmount}</h2>
-      {/* Display messages here */}
-      <h2>Enemy Life: {enemyLife}</h2>
-    </div>
+    <GameRoom
+      roomName={roomName}
+      wallet={wallet}
+      message={message}
+      setMessage={setMessage}
+      sendMessage={sendMessage}
+      lifeAmount={lifeAmount}
+      enemyLife={enemyLife}
+    />
   );
 }
