@@ -99,14 +99,14 @@ export default function Page() {
 
   useEffect(() => {
     if (lifeAmount <= 0) {
-      router.push("/loseRoom");
+      router.push(`/loseRoom`);
     }
     sendLifeAmount();
   }, [lifeAmount]);
 
   useEffect(() => {
     if (enemyLife <= 0) {
-      router.push("/winRoom");
+      router.push(`/winRoom?name=${encodeURIComponent(roomName!)}`);
     }
   }, [enemyLife]);
 

@@ -58,7 +58,7 @@ export default function Page() {
       }
     };
 
-    supabase
+    const lobbySubscription = supabase
       .channel("lobby")
       .on(
         "postgres_changes",
@@ -66,9 +66,9 @@ export default function Page() {
         handleInserts
       )
       .subscribe();
-    handleInserts({});
+    //handleInserts({});
 
-    supabase
+    const battleSubscription = supabase
       .channel("battles")
       .on(
         "postgres_changes",
@@ -76,10 +76,15 @@ export default function Page() {
         handleBattleInserts
       )
       .subscribe();
-    handleBattleInserts({});
+    //handleBattleInserts({});
+
+    return () => {
+      supabase.removeChannel(lobbySubscription);
+      supabase.removeChannel(battleSubscription);
+    };
 
     // Clean up the subscription
-  }, [supabase]);
+  }, [wallets, router]);
 
   return (
     <RotatingBox

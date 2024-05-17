@@ -17,6 +17,26 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export default function Page() {
   const { wallets } = useWallets();
+  const wallet = wallets[0].address;
+
+  const updateDatabase = async () => {
+    try {
+      const result = await axios.put("http://localhost:3000/api/battle", {
+        player: wallet,
+      });
+      console.log(result.data); // Handle the result if necessary
+    } catch (error) {
+      console.error("Error updating database", error);
+    }
+  };
+
+  useEffect(() => {
+    const updateAndRedirect = async () => {
+      await updateDatabase();
+    };
+
+    updateAndRedirect();
+  }, []);
 
   return (
     <div>

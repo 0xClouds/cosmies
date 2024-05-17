@@ -1,11 +1,6 @@
 import supabase from "../../../data/supabase";
 import { NextApiRequest, NextApiResponse } from "next";
-
-enum lobbyStatus {
-  "WAITING" = 0,
-  "PLAYING" = 1,
-  "DONE" = 2,
-}
+import { lobbyStatus } from "../enums/enums";
 
 export async function POST(req: Request, res: Response) {
   try {
