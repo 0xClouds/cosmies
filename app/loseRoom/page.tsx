@@ -21,7 +21,7 @@ export default function Page() {
 
   const updateDatabase = async () => {
     try {
-      const result = await axios.put("http://localhost:3000/api/battle", {
+      const result = await axios.put("/api/battle", {
         player: wallet,
       });
       console.log(result.data); // Handle the result if necessary

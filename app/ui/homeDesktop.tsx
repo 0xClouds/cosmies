@@ -22,7 +22,7 @@ const HomeDesktop: React.FC = () => {
     console.log("handle play game");
     try {
       if (wallet) {
-        await axios.post("http://localhost:3000/api/lobby", {
+        await axios.post("/api/lobby", {
           publicAddress: wallet.address,
         });
         router.push("/lobby");

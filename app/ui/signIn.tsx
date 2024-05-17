@@ -15,7 +15,7 @@ const SignIn: React.FC = () => {
 
   const addUser = async (publicAddress: string) => {
     try {
-      await axios.post("http://localhost:3000/api/user", {
+      await axios.post("/api/user", {
         publicAddress: publicAddress,
       });
     } catch (e) {

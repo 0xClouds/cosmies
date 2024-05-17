@@ -25,7 +25,7 @@ export default function Page() {
     const handleInserts = async (payload: any) => {
       //Listen to table
       console.log("Change received!", payload);
-      const players = await axios.get("http://localhost:3000/api/lobby", {});
+      const players = await axios.get("/api/lobby", {});
       console.log("the players", players);
       console.log("connected Plyer", wallets[0].address);
       if (players.data.length >= 2) {
@@ -33,7 +33,7 @@ export default function Page() {
         const oldestPlayerName = players.data[0].public_address;
         const currentPlayer = wallets[0].address;
         if (oldestPlayerName != currentPlayer) {
-          const result = await axios.post("http://localhost:3000/api/battle", {
+          const result = await axios.post("/api/battle", {
             player1: oldestPlayerName,
             player2: currentPlayer,
           });
