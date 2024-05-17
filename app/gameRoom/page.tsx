@@ -60,9 +60,6 @@ export default function Page() {
         room.on("broadcast", { event: "life-update" }, (payload) => {
           if (payload.payload.sender !== wallet) {
             setEnemyLife(payload.payload.life);
-            if (enemyLife <= 0) {
-              router.push("/winningPage");
-            }
           }
         });
 
@@ -102,10 +99,16 @@ export default function Page() {
 
   useEffect(() => {
     if (lifeAmount <= 0) {
-      router.push("/losePage");
+      router.push("/loseRoom");
     }
     sendLifeAmount();
   }, [lifeAmount]);
+
+  useEffect(() => {
+    if (enemyLife <= 0) {
+      router.push("/winRoom");
+    }
+  }, [enemyLife]);
 
   const sendLifeAmount = () => {
     if (isSubscribed.current && wallet) {

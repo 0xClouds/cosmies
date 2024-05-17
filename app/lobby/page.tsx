@@ -81,5 +81,10 @@ export default function Page() {
     // Clean up the subscription
   }, [supabase]);
 
-  return <RotatingBox></RotatingBox>;
+  return (
+    <RotatingBox
+      title="Welcome to the Lobby!"
+      footer="Finding an opponent for you . . ."
+    ></RotatingBox>
+  );
 }
