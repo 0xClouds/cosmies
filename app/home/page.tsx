@@ -41,7 +41,11 @@ export default function Home() {
         const smartAccountClient = await createLightAccountAlchemyClient({
           signer: privySigner,
           chain: sepolia,
+<<<<<<< HEAD:app/home/page.tsx
           apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+=======
+          apiKey: "",
+>>>>>>> main:app/gamePage/page.tsx
         });
 
         setSmartAccountClient(smartAccountClient);
