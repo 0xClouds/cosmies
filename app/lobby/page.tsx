@@ -67,7 +67,7 @@ export default function Page() {
         handleInserts
       )
       .subscribe();
-    //handleInserts({});
+    handleInserts({});
 
     const battleSubscription = supabase
       .channel("battles")
@@ -77,7 +77,7 @@ export default function Page() {
         handleBattleInserts
       )
       .subscribe();
-    //handleBattleInserts({});
+    handleBattleInserts({});
 
     return () => {
       supabase.removeChannel(lobbySubscription);
