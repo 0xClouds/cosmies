@@ -6,21 +6,41 @@ import Image from "next/image";
 import logo from "../../public/images/logo.png";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@privy-io/react-auth";
+import axios from "axios";
 
 const SignIn: React.FC = () => {
   const [color, setColor] = useState(false);
   const router = useRouter();
   const { ready, authenticated } = usePrivy();
 
+  const addUser = async (publicAddress: string) => {
+    try {
+      await axios.post("/api/user", {
+        publicAddress: publicAddress,
+      });
+    } catch (e) {
+      console.log("user probably already added");
+    }
+  };
+
   const { login } = useLogin({
-    onComplete: (
+    onComplete: async (
       user,
       isNewUser,
       wasAlreadyAuthenticated,
       loginMethod,
       linkedAccount
     ) => {
-      router.push("/gamePage");
+      await user;
+      console.log("user", user);
+      if (user.wallet?.address) {
+        addUser(user.wallet.address);
+        console.log("added users");
+      }
+      console.log("BEfore the push", user);
+      console.log("BEfore the push", user.wallet);
+
+      router.push("/home");
     },
     onError: (error) => {
       console.log(error);
@@ -29,7 +49,7 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (ready && authenticated) {
-      router.push("/gamePage"); // Redirect to gamePage if already authenticated
+      router.push("/home"); // Redirect to gamePage if already authenticated
     }
   }, [ready, authenticated, router]);
 

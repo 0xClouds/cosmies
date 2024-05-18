@@ -2,15 +2,37 @@ import styles from "../../styles/HomeDesktop.module.scss";
 import Navbar from "./navbar";
 //import Button from "./button";
 import Footer from "./footer";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // Assuming Navbar and Button are typed in their respective files
 const HomeDesktop: React.FC = () => {
   const { ready, authenticated, login, logout } = usePrivy();
+  const { wallets } = useWallets();
 
   const [color, setColor] = useState(false);
+
+  const router = useRouter();
+
+  const handlePlayGame = async () => {
+    const wallet = wallets[0];
+    console.log("handle play game");
+    try {
+      if (wallet) {
+        await axios.post("/api/lobby", {
+          publicAddress: wallet.address,
+        });
+        router.push("/lobby");
+      } else {
+        console.log("No Wallets");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -47,6 +69,18 @@ const HomeDesktop: React.FC = () => {
                 Mint Here
                 <span className={styles.leftArrow}>
                   <ArrowRight fill={color ? "orange" : "white"} />
+                </span>
+              </button>
+            </div>
+            <div style={{ marginTop: "20px" }}>
+              <button
+                onMouseEnter={() => setColor(true)}
+                onMouseLeave={() => setColor(false)}
+                onClick={handlePlayGame}
+              >
+                Play a Game
+                <span className={styles.leftArrow}>
+                  <ArrowRight fill={color ? "green" : "black"} />
                 </span>
               </button>
             </div>

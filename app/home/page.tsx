@@ -12,8 +12,7 @@ import { createWalletClient, custom } from "viem";
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useSmartAccountClient } from "../contexts/SmartAccountClientContext";
-import { useConnectWallet, useWallets } from "@privy-io/react-auth";
-import { z, ZodError } from "zod";
+import { useWallets } from "@privy-io/react-auth";
 
 export default function Home() {
   const { ready, authenticated } = usePrivy();
@@ -42,7 +41,11 @@ export default function Home() {
         const smartAccountClient = await createLightAccountAlchemyClient({
           signer: privySigner,
           chain: sepolia,
+<<<<<<< HEAD:app/home/page.tsx
+          apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
+=======
           apiKey: "",
+>>>>>>> main:app/gamePage/page.tsx
         });
 
         setSmartAccountClient(smartAccountClient);
@@ -51,8 +54,6 @@ export default function Home() {
 
     setupClient();
   }, []);
-
-  console.log(smartAccountClient);
 
   return (
     <div className={styles.mainContainer}>
