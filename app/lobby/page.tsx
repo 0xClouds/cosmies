@@ -29,7 +29,8 @@ export default function Page() {
       console.log("the players", players);
       console.log("connected Plyer", wallets[0].address);
       if (players.data.length >= 2) {
-        players.data.sort((a, b) => a.created_at - b.created_at);
+        //todo fix the type of a and b
+        players.data.sort((a: any, b: any) => a.created_at - b.created_at);
         const oldestPlayerName = players.data[0].public_address;
         const currentPlayer = wallets[0].address;
         if (oldestPlayerName != currentPlayer) {

@@ -3,7 +3,7 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import styles from "../../styles/RotatingBox.module.scss";
 import RotatingBox from "../ui/rotatingBox";
 import { platform } from "os";
@@ -46,13 +46,15 @@ export default function Page() {
   }, []);
 
   return (
-    <div>
-      <h1>The winner is...{wallets[0].address}</h1>
-      <RotatingBox
-        title="Congrats you won!"
-        footer="Keep on going!"
-      ></RotatingBox>
-      ;
-    </div>
+    <Suspense>
+      <div>
+        <h1>The winner is...{wallets[0].address}</h1>
+        <RotatingBox
+          title="Congrats you won!"
+          footer="Keep on going!"
+        ></RotatingBox>
+        ;
+      </div>
+    </Suspense>
   );
 }

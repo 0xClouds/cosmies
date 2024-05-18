@@ -31,6 +31,7 @@ export const SmartAccountClientProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <SmartAccountClientContext.Provider
+      // @ts-ignore
       value={{ smartAccountClient, setSmartAccountClient }}
     >
       {children}
