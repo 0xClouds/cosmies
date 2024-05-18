@@ -1,7 +1,7 @@
 import styles from "../../styles/GameRoom.module.scss";
 import stylesButton from "../../styles/Button.module.scss";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
 
 interface GameRoomProps {
@@ -35,45 +35,47 @@ const GameRoom: React.FC<GameRoomProps> = ({
   const actions = cosmieActions[player] || [];
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.background}></div> {/* Background div */}
-      <div className={styles.playerInformation}>
-        <h1>IT'S MATCH TIME</h1>
-        <h1>Battle Room</h1>
-        {roomName && <p>Room ID: {roomName}</p>}
-        <h3>The user wallet for this is {wallet}</h3>
+    <Suspense>
+      <div className={styles.mainContainer}>
+        <div className={styles.background}></div> {/* Background div */}
+        <div className={styles.playerInformation}>
+          <h1>IT IS MATCH TIME</h1>
+          <h1>Battle Room</h1>
+          {roomName && <p>Room ID: {roomName}</p>}
+          <h3>The user wallet for this is {wallet}</h3>
 
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message here"
-        />
-        <p></p>
-        <button onClick={sendMessage}>Send Message</button>
-        <h2>Life: {lifeAmount}</h2>
-        <h2>Enemy Life: {enemyLife}</h2>
-      </div>
-      <div className={styles.buttonContainer}>
-        {actions.map((action, index) => (
+          <input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message here"
+          />
+          <p></p>
+          <button onClick={sendMessage}>Send Message</button>
+          <h2>Life: {lifeAmount}</h2>
+          <h2>Enemy Life: {enemyLife}</h2>
+        </div>
+        <div className={styles.buttonContainer}>
+          {actions.map((action, index) => (
+            <button
+              className={stylesButton.button}
+              key={index}
+              onClick={() => console.log(`${action} action triggered`)}
+            >
+              {action}
+              <span className={styles.leftArrow}>
+                <ArrowRight fill={color ? "green" : "orange"} />
+              </span>
+            </button>
+          ))}
           <button
             className={stylesButton.button}
-            key={index}
-            onClick={() => console.log(`${action} action triggered`)}
+            onClick={() => console.log("Implement the runaway button")}
           >
-            {action}
-            <span className={styles.leftArrow}>
-              <ArrowRight fill={color ? "green" : "orange"} />
-            </span>
+            Run Away
           </button>
-        ))}
-        <button
-          className={stylesButton.button}
-          onClick={() => console.log("Implement the runaway button")}
-        >
-          Run Away
-        </button>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };
 

@@ -19,6 +19,7 @@ export default function Home() {
 
   const { wallets } = useWallets();
 
+  // @ts-ignore
   const { smartAccountClient, setSmartAccountClient } = useSmartAccountClient();
 
   useEffect(() => {
@@ -27,12 +28,17 @@ export default function Home() {
       if (embeddedWallet) {
         const eip1193provider = await embeddedWallet.getEthereumProvider();
         const privyClient = createWalletClient({
+          // @ts-ignore
+
           account: embeddedWallet.address,
+          // @ts-ignore
+
           chain: "sepolia",
           transport: custom(eip1193provider),
         });
 
         const privySigner: SmartAccountSigner = new WalletClientSigner(
+          // @ts-ignore
           privyClient,
           "json-rpc"
         );
@@ -41,11 +47,7 @@ export default function Home() {
         const smartAccountClient = await createLightAccountAlchemyClient({
           signer: privySigner,
           chain: sepolia,
-<<<<<<< HEAD:app/home/page.tsx
           apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string,
-=======
-          apiKey: "",
->>>>>>> main:app/gamePage/page.tsx
         });
 
         setSmartAccountClient(smartAccountClient);

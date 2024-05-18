@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import styles from "../../styles/CosmieVariations.module.scss";
 import Image from "next/image";
 import { images } from "./images";

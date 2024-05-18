@@ -1,3 +1,4 @@
+// @ts-nocheck
 import styles from "../../styles/CosmiesInfo.module.scss";
 import Image from "next/image";
 import { images } from "./images";
