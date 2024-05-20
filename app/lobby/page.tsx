@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import styles from "../../styles/RotatingBox.module.scss";
 import RotatingBox from "../ui/rotatingBox";
+import CryptoJS from "crypto-js";
 
 //todo-Move these out?
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -33,14 +34,25 @@ export default function Page() {
         players.data.sort((a: any, b: any) => a.created_at - b.created_at);
         const oldestPlayerName = players.data[0].public_address;
         const currentPlayer = wallets[0].address;
+        const player1State = Math.random() < 0.5;
+        const player2State = !player1State;
         if (oldestPlayerName != currentPlayer) {
           const result = await axios.post("/api/battle", {
-            player1: oldestPlayerName,
-            player2: currentPlayer,
+            player1: currentPlayer,
+            player2: oldestPlayerName,
           });
-          console.log("the result", result);
+
+          const encryptedData = CryptoJS.AES.encrypt(
+            JSON.stringify({
+              currentPlayer,
+              player1State,
+              player2State,
+            }),
+            "secret_key"
+          ).toString();
+
           router.push(
-            `/gameRoom?name=${encodeURIComponent(result.data.roomName)}`
+            `/gameRoom?name=${encodeURIComponent(result.data.roomName)}&data=${encodeURIComponent(encryptedData)}`
           );
         }
       }
@@ -54,7 +66,6 @@ export default function Page() {
         battle?.opponent === wallets[0].address ||
         battle?.player === wallets[0].address
       ) {
-        console.log("I pushed");
         router.push(`/gameRoom?name=${encodeURIComponent(battle.roomName)}`);
       }
     };

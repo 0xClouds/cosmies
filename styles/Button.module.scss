@@ -35,3 +35,10 @@
 .button:active {
   transform: translateY(4px);
 }
+
+.button:disabled {
+  background-color: #ccc; /* Light gray background */
+  color: #666; /* Dark gray text color */
+  cursor: not-allowed; /* Change cursor to indicate the button is not clickable */
+  opacity: 0.6; /* Optional: make it slightly transparent */
+}

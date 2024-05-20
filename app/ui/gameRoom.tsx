@@ -15,6 +15,7 @@ interface GameRoomProps {
   setAttackType: (attackType: string) => void;
   lifeAmount: number;
   enemyLife: number;
+  currentTurn: boolean;
 }
 
 const GameRoom: React.FC<GameRoomProps> = ({
@@ -26,6 +27,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
   setAttackType,
   lifeAmount,
   enemyLife,
+  currentTurn,
 }) => {
   const [color, setColor] = useState(false);
   const player = "jambi" as Cosmie;
@@ -80,6 +82,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
               className={stylesButton.button}
               key={index}
               onClick={() => actionClick(player, action)}
+              disabled={!currentTurn}
             >
               {action}
               <span className={styles.leftArrow}>
@@ -90,6 +93,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
           <button
             className={stylesButton.button}
             onClick={() => console.log("Implement the runaway button")}
+            disabled={!currentTurn}
           >
             Run Away
           </button>

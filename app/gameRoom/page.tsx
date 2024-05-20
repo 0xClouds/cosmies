@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GameRoom from "../ui/gameRoom";
 import { attackOnDefense } from "./gameEngine";
+import CryptoJS from "crypto-js";
 
 //todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -31,17 +32,35 @@ export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomName = searchParams.get("name");
+  const startPosition = searchParams.get("data");
   const [attackAmount, setAttackAmount] = useState(0);
   const [attackType, setAttackType] = useState("");
   const [defenseAmount, setDefenseAmount] = useState(0);
-
   const isSubscribed = useRef(false);
+  const [currentTurn, setCurrentTurn] = useState(false);
 
   useEffect(() => {
     if (wallets.length > 0 && wallets[0].address) {
       setWallet(wallets[0].address);
+
+      if (startPosition) {
+        try {
+          const bytes = CryptoJS.AES.decrypt(startPosition, "secret_key");
+          const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+          const { currentPlayer, player1State, player2State } = decryptedData;
+          if (wallets[0].address) {
+            if (wallets[0].address === currentPlayer) {
+              setCurrentTurn(player1State);
+            } else {
+              setCurrentTurn(player2State);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to decrypt data:", error);
+        }
+      }
     }
-  }, [wallets]);
+  }, [wallets, startPosition]);
 
   const room = supabase.channel(roomName!);
 
@@ -52,7 +71,6 @@ export default function Page() {
         room
           .on("broadcast", { event: "got a message" }, (payload) => {
             if (defenseAmount != 0) {
-              console.log("WE are defense");
               const damage = attackOnDefense(
                 defenseAmount,
                 payload.payload.damage
@@ -60,9 +78,12 @@ export default function Page() {
 
               setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
               setDefenseAmount(0);
+              setCurrentTurn(true);
             } else {
+              console.log("Got a message");
               const damage = Number(payload.payload.damage);
               setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
+              setCurrentTurn(true);
             }
           })
           .subscribe();
@@ -104,6 +125,7 @@ export default function Page() {
           })
           .then(() => {
             setAttackAmount(0); // Clear the message input after sending
+            setCurrentTurn(false);
           })
           .catch((error) => {
             console.log("Error sending message:", error);
@@ -153,6 +175,7 @@ export default function Page() {
       setAttackType={setAttackType}
       lifeAmount={lifeAmount}
       enemyLife={enemyLife}
+      currentTurn={currentTurn}
     />
   );
 }
