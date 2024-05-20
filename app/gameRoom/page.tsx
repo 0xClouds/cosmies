@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GameRoom from "../ui/gameRoom";
+import { attackOnDefense } from "./gameEngine";
 
 //todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -16,7 +17,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 export default function Page() {
   const { wallets } = useWallets();
   const [wallet, setWallet] = useState(""); // Initialize with empty string or null
-
   const [lifeAmount, setLifeAmount] = useState(100);
   const [enemyLife, setEnemyLife] = useState(100);
 
@@ -31,7 +31,9 @@ export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomName = searchParams.get("name");
-  const [message, setMessage] = useState("");
+  const [attackAmount, setAttackAmount] = useState(0);
+  const [attackType, setAttackType] = useState("");
+  const [defenseAmount, setDefenseAmount] = useState(0);
 
   const isSubscribed = useRef(false);
 
@@ -49,7 +51,16 @@ export default function Page() {
         // Subscribe to "got a message" events
         room
           .on("broadcast", { event: "got a message" }, (payload) => {
-            if (payload.event === "got a message") {
+            if (defenseAmount != 0) {
+              console.log("WE are defense");
+              const damage = attackOnDefense(
+                defenseAmount,
+                payload.payload.damage
+              );
+
+              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
+              setDefenseAmount(0);
+            } else {
               const damage = Number(payload.payload.damage);
               setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
             }
@@ -78,22 +89,26 @@ export default function Page() {
     }
   }, [wallet, room]);
 
-  const sendMessage = () => {
-    if (message && isSubscribed.current) {
-      room
-        .send({
-          type: "broadcast",
-          payload: { damage: message },
-          sender: wallet,
-          event: "got a message",
-        })
-        .then(() => {
-          console.log("THE MESSAGE WAS SENT");
-          setMessage(""); // Clear the message input after sending
-        })
-        .catch((error) => {
-          console.log("Error sending message:", error);
-        });
+  const sendAttackAmount = () => {
+    if (attackType && isSubscribed.current) {
+      if (attackType === "shield") {
+        setDefenseAmount(attackAmount);
+        setAttackAmount(0);
+      } else {
+        room
+          .send({
+            type: "broadcast",
+            payload: { damage: attackAmount, attackType: attackType },
+            sender: wallet,
+            event: "got a message",
+          })
+          .then(() => {
+            setAttackAmount(0); // Clear the message input after sending
+          })
+          .catch((error) => {
+            console.log("Error sending message:", error);
+          });
+      }
     }
   };
 
@@ -132,9 +147,10 @@ export default function Page() {
     <GameRoom
       roomName={roomName}
       wallet={wallet}
-      message={message}
-      setMessage={setMessage}
-      sendMessage={sendMessage}
+      attackAmount={attackAmount}
+      setAttackAmount={setAttackAmount}
+      sendAttackAmount={sendAttackAmount}
+      setAttackType={setAttackType}
       lifeAmount={lifeAmount}
       enemyLife={enemyLife}
     />

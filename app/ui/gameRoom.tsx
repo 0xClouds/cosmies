@@ -4,12 +4,15 @@ import stylesButton from "../../styles/Button.module.scss";
 import { Suspense, useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
 
+import { getDiceRoll, Cosmie, Stat } from "../gameRoom/gameEngine";
+
 interface GameRoomProps {
   roomName: string | null;
   wallet: string;
-  message: string;
-  setMessage: (message: string) => void;
-  sendMessage: () => void;
+  attackAmount: number;
+  setAttackAmount: (attackAmount: number) => void;
+  sendAttackAmount: () => void;
+  setAttackType: (attackType: string) => void;
   lifeAmount: number;
   enemyLife: number;
 }
@@ -17,22 +20,44 @@ interface GameRoomProps {
 const GameRoom: React.FC<GameRoomProps> = ({
   roomName,
   wallet,
-  message,
-  setMessage,
-  sendMessage,
+  attackAmount,
+  setAttackAmount,
+  sendAttackAmount,
+  setAttackType,
   lifeAmount,
   enemyLife,
 }) => {
   const [color, setColor] = useState(false);
-  const player = "jambi";
-  const cosmieActions = {
+  const player = "jambi" as Cosmie;
+
+  const cosmieActions: Record<Cosmie, Array<String>> = {
     jambi: ["Tackle", "Evade", "Shield", "Ice Punch"],
-    Glacepom: ["Tackle", "Evade", "Shield", "Fire Kick"],
-    Suburaku: ["Tackle", "Evade", "Shield", "Dark Bite"],
-    Grassol: ["Tackle", "Evade", "Shield", "Vine Whip"],
+    glacepom: ["Tackle", "Evade", "Shield", "Fire Kick"],
+    suburaku: ["Tackle", "Evade", "Shield", "Dark Bite"],
+    grassol: ["Tackle", "Evade", "Shield", "Vine Whip"],
   };
 
-  const actions = cosmieActions[player] || [];
+  // Map the actions to valid Stat values
+  //typescript bullshit
+  const actionMap: Record<string, Stat> = {
+    Tackle: "tackle",
+    Evade: "evade",
+    Shield: "shield",
+    "Ice Punch": "specialMove",
+    "Fire Kick": "specialMove",
+    "Dark Bite": "specialMove",
+    "Vine Whip": "specialMove",
+  };
+
+  const actions: Array<Stat> = cosmieActions[player].map(
+    (action) => (actionMap[action as string] as Stat) || "specialMove"
+  );
+
+  function actionClick(player: Cosmie, action: Stat) {
+    const attackAmount = getDiceRoll(player, action);
+    setAttackType(action);
+    setAttackAmount(attackAmount);
+  }
 
   return (
     <Suspense>
@@ -43,14 +68,9 @@ const GameRoom: React.FC<GameRoomProps> = ({
           <h1>Battle Room</h1>
           {roomName && <p>Room ID: {roomName}</p>}
           <h3>The user wallet for this is {wallet}</h3>
-
-          <input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message here"
-          />
+          <h2>{attackAmount}</h2>
           <p></p>
-          <button onClick={sendMessage}>Send Message</button>
+          <button onClick={sendAttackAmount}>Send Message</button>
           <h2>Life: {lifeAmount}</h2>
           <h2>Enemy Life: {enemyLife}</h2>
         </div>
@@ -59,7 +79,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
             <button
               className={stylesButton.button}
               key={index}
-              onClick={() => console.log(`${action} action triggered`)}
+              onClick={() => actionClick(player, action)}
             >
               {action}
               <span className={styles.leftArrow}>
