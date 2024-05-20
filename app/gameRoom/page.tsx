@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GameRoom from "../ui/gameRoom";
-import { attackOnDefense } from "./gameEngine";
+import { attackOnDefense, attackOnEvade } from "./gameEngine";
 import CryptoJS from "crypto-js";
 
 //todo-Move these out
