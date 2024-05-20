@@ -64,3 +64,9 @@ export function attackOnDefense(defense: number, attack: number): number {
   const result = attack - defense;
   return result > 0 ? result : 0;
 }
+
+//treating defense as defense - attack
+export function attackOnEvade(evade: number, attack: number): number {
+  const result = Math.floor(attack / evade);
+  return result;
+}

@@ -36,6 +36,7 @@ export default function Page() {
   const [attackAmount, setAttackAmount] = useState(0);
   const [attackType, setAttackType] = useState("");
   const [defenseAmount, setDefenseAmount] = useState(0);
+  const [evadeAmount, setEvadeAmount] = useState(0);
   const isSubscribed = useRef(false);
   const [currentTurn, setCurrentTurn] = useState(false);
 
@@ -79,6 +80,12 @@ export default function Page() {
               setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
               setDefenseAmount(0);
               setCurrentTurn(true);
+            } else if (evadeAmount != 0) {
+              const damage = attackOnEvade(evadeAmount, payload.payload.damage);
+
+              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
+              setDefenseAmount(0);
+              setCurrentTurn(true);
             } else {
               console.log("Got a message");
               const damage = Number(payload.payload.damage);
@@ -115,6 +122,9 @@ export default function Page() {
       if (attackType === "shield") {
         setDefenseAmount(attackAmount);
         setAttackAmount(0);
+      } else if (attackType === "evade") {
+        setEvadeAmount(attackAmount);
+        setEvadeAmount(0);
       } else {
         room
           .send({
