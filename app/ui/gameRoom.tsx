@@ -16,6 +16,7 @@ interface GameRoomProps {
   lifeAmount: number;
   enemyLife: number;
   currentTurn: boolean;
+  defense: number;
 }
 
 const GameRoom: React.FC<GameRoomProps> = ({
@@ -28,6 +29,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
   lifeAmount,
   enemyLife,
   currentTurn,
+  defense,
 }) => {
   const [color, setColor] = useState(false);
   const player = "jambi" as Cosmie;
@@ -71,6 +73,8 @@ const GameRoom: React.FC<GameRoomProps> = ({
           {roomName && <p>Room ID: {roomName}</p>}
           <h3>The user wallet for this is {wallet}</h3>
           <h2>{attackAmount}</h2>
+          <p></p>
+          <h2>Defense: {defense}</h2>
           <p></p>
           <button onClick={sendAttackAmount}>Send Message</button>
           <h2>Life: {lifeAmount}</h2>

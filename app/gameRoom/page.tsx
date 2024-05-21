@@ -1,154 +1,140 @@
 "use client";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import GameRoom from "../ui/gameRoom";
 import { attackOnDefense, attackOnEvade } from "./gameEngine";
 import CryptoJS from "crypto-js";
+import { start } from "repl";
 
-//todo-Move these out
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
-
 const SUPABASE_KEY =
   (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string) || "";
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export default function Page() {
   const { wallets } = useWallets();
-  const [wallet, setWallet] = useState(""); // Initialize with empty string or null
-  const [lifeAmount, setLifeAmount] = useState(100);
-  const [enemyLife, setEnemyLife] = useState(100);
-
-  useEffect(() => {
-    // Only update wallet when wallets are available and the first wallet has an address
-    if (wallets.length > 0 && wallets[0].address) {
-      setWallet(wallets[0].address);
-    }
-  }, [wallets]); // Depend on wallets to update wallet state
-
-  // other component code remains the same
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomName = searchParams.get("name");
-  const startPosition = searchParams.get("data");
+  const playerPassedIn = searchParams.get("currentPlayer");
+  const startPosition = searchParams.get("start") === "true";
+
+  const [wallet, setWallet] = useState<string>("");
+  const [lifeAmount, setLifeAmount] = useState(100);
+  const [enemyLife, setEnemyLife] = useState(100);
   const [attackAmount, setAttackAmount] = useState(0);
-  const [attackType, setAttackType] = useState("");
+  const [attackType, setAttackType] = useState<string>("");
   const [defenseAmount, setDefenseAmount] = useState(0);
   const [evadeAmount, setEvadeAmount] = useState(0);
-  const isSubscribed = useRef(false);
+  const defenseAmountRef = useRef(defenseAmount);
+  const evadeAmountRef = useRef(evadeAmount);
   const [currentTurn, setCurrentTurn] = useState(false);
 
-  useEffect(() => {
+  const isSubscribed = useRef(false);
+  const room = useRef(supabase.channel(roomName!)).current;
+
+  const initializeWallet = useCallback(() => {
     if (wallets.length > 0 && wallets[0].address) {
       setWallet(wallets[0].address);
-
-      if (startPosition) {
-        try {
-          const bytes = CryptoJS.AES.decrypt(startPosition, "secret_key");
-          const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-          const { currentPlayer, player1State, player2State } = decryptedData;
-          if (wallets[0].address) {
-            if (wallets[0].address === currentPlayer) {
-              setCurrentTurn(player1State);
-            } else {
-              setCurrentTurn(player2State);
-            }
-          }
-        } catch (error) {
-          console.error("Failed to decrypt data:", error);
-        }
-      }
     }
-  }, [wallets, startPosition]);
-
-  const room = supabase.channel(roomName!);
+  }, [wallets]);
 
   useEffect(() => {
+    defenseAmountRef.current = defenseAmount;
+    evadeAmountRef.current = evadeAmount;
+  }, [defenseAmount, evadeAmount]);
+
+  useEffect(() => {
+    initializeWallet();
+  }, [initializeWallet]);
+
+  useEffect(() => {
+    if (playerPassedIn) {
+      try {
+        const isCurrentTurn =
+          wallet === playerPassedIn ? startPosition : !startPosition;
+
+        setCurrentTurn(isCurrentTurn);
+      } catch (error) {
+        console.error("Failed to decrypt data:", error);
+      }
+    }
+  }, [playerPassedIn]);
+
+  const subscribeToRoom = useCallback(() => {
     if (wallet && !isSubscribed.current) {
-      const subscribeToRoom = () => {
-        // Subscribe to "got a message" events
-        room
-          .on("broadcast", { event: "got a message" }, (payload) => {
-            if (defenseAmount != 0) {
-              const damage = attackOnDefense(
-                defenseAmount,
-                payload.payload.damage
-              );
-
-              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
-              setDefenseAmount(0);
-              setCurrentTurn(true);
-            } else if (evadeAmount != 0) {
-              const damage = attackOnEvade(evadeAmount, payload.payload.damage);
-
-              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
-              setDefenseAmount(0);
-              setCurrentTurn(true);
-            } else {
-              console.log("Got a message");
-              const damage = Number(payload.payload.damage);
-              setLifeAmount((prevLifeAmount) => prevLifeAmount - damage);
-              setCurrentTurn(true);
-            }
-          })
-          .subscribe();
-
-        // Subscribe to "life-update" events
-        room.on("broadcast", { event: "life-update" }, (payload) => {
+      room
+        .on("broadcast", { event: "got a message" }, (payload) => {
+          let damage = Number(payload.payload.damage);
+          if (defenseAmountRef.current !== 0) {
+            damage = attackOnDefense(defenseAmountRef.current, damage);
+            setDefenseAmount(0);
+          } else if (evadeAmountRef.current !== 0) {
+            damage = attackOnEvade(evadeAmountRef.current, damage);
+            setEvadeAmount(0);
+          }
+          setLifeAmount((prev) => prev - damage);
+          setCurrentTurn(true);
+        })
+        .on("broadcast", { event: "life-update" }, (payload) => {
           if (payload.payload.sender !== wallet) {
             setEnemyLife(payload.payload.life);
           }
-        });
+        })
+        .subscribe();
 
-        isSubscribed.current = true; // Mark as subscribed
-      };
+      isSubscribed.current = true;
 
-      subscribeToRoom();
-
-      // Cleanup function
       return () => {
         if (isSubscribed.current) {
           room.unsubscribe();
-          isSubscribed.current = false; // Reset subscription status
+          isSubscribed.current = false;
         }
       };
     }
-  }, [wallet, room]);
+  }, [wallet, room, defenseAmount, evadeAmount]);
 
-  const sendAttackAmount = () => {
+  useEffect(() => {
+    subscribeToRoom();
+  }, [subscribeToRoom]);
+
+  const sendAttack = useCallback(() => {
     if (attackType && isSubscribed.current) {
+      const payload = {
+        type: "broadcast",
+        payload: { damage: attackAmount, attackType },
+        sender: wallet,
+        event: "got a message",
+      };
+
       if (attackType === "shield") {
         setDefenseAmount(attackAmount);
-        setAttackAmount(0);
+        payload.payload.damage = 0;
       } else if (attackType === "evade") {
         setEvadeAmount(attackAmount);
-        setEvadeAmount(0);
-      } else {
-        room
-          .send({
-            type: "broadcast",
-            payload: { damage: attackAmount, attackType: attackType },
-            sender: wallet,
-            event: "got a message",
-          })
-          .then(() => {
-            setAttackAmount(0); // Clear the message input after sending
-            setCurrentTurn(false);
-          })
-          .catch((error) => {
-            console.log("Error sending message:", error);
-          });
+        payload.payload.damage = 0;
       }
+
+      room
+        .send(payload)
+        .then(() => {
+          setAttackAmount(0);
+          setCurrentTurn(false);
+        })
+        .catch((error) => {
+          console.error("Error sending message:", error);
+        });
     }
-  };
+  }, [attackAmount, attackType, wallet, room]);
 
   useEffect(() => {
     if (lifeAmount <= 0) {
       router.push(`/loseRoom`);
+    } else {
+      sendLifeAmount();
     }
-    sendLifeAmount();
   }, [lifeAmount]);
 
   useEffect(() => {
@@ -157,23 +143,19 @@ export default function Page() {
     }
   }, [enemyLife]);
 
-  const sendLifeAmount = () => {
+  const sendLifeAmount = useCallback(() => {
     if (isSubscribed.current && wallet) {
       room
         .send({
           type: "broadcast",
           payload: { life: lifeAmount, sender: wallet },
-          sender: wallet, //todo for some reason this isn't working with this message, but working with the other one???
+          sender: wallet,
           event: "life-update",
         })
-        .then(() => {
-          console.log("Life amount sent successfully w: ", wallet);
-        })
-        .catch((error) => {
-          console.log("Error sending life amount:", error);
-        });
+        .then(() => console.log("Life amount sent successfully:", wallet))
+        .catch((error) => console.error("Error sending life amount:", error));
     }
-  };
+  }, [lifeAmount, wallet, room]);
 
   return (
     <GameRoom
@@ -181,11 +163,12 @@ export default function Page() {
       wallet={wallet}
       attackAmount={attackAmount}
       setAttackAmount={setAttackAmount}
-      sendAttackAmount={sendAttackAmount}
+      sendAttackAmount={sendAttack}
       setAttackType={setAttackType}
       lifeAmount={lifeAmount}
       enemyLife={enemyLife}
       currentTurn={currentTurn}
+      defense={defenseAmount}
     />
   );
 }
