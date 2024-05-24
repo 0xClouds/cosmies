@@ -131,6 +131,7 @@ export default function Page() {
 
   useEffect(() => {
     if (lifeAmount <= 0) {
+      sendLifeAmount();
       router.push(`/loseRoom`);
     } else {
       sendLifeAmount();

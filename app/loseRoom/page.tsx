@@ -1,10 +1,9 @@
 "use client";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import styles from "../../styles/RotatingBox.module.scss";
+import { useEffect, useState } from "react";
+import AfterGame from "../ui/afterGame";
 import RotatingBox from "../ui/rotatingBox";
 
 // todo-Move these out?
@@ -38,11 +37,10 @@ export default function Page() {
 
   return (
     <div>
-      <h1>The loser is... {wallet}</h1>
       <RotatingBox
-        title="We are sorry, but lost!"
-        footer="Your NFT has been burned =("
-      />
+        title={"We are sorry, " + wallet + " but you lost!"}
+        footer="Your NFT has been burned =( "
+      ></RotatingBox>
     </div>
   );
 }
