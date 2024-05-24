@@ -1,13 +1,10 @@
 "use client";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import styles from "../../styles/RotatingBox.module.scss";
+import { useEffect } from "react";
 import RotatingBox from "../ui/rotatingBox";
-import ArrowRight from "@/public/images/icons/arrow-right";
-import AfterGame from "../ui/afterGame";
 
 //todo-Move these out?
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";

@@ -3,7 +3,6 @@ import { useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import AfterGame from "../ui/afterGame";
 import RotatingBox from "../ui/rotatingBox";
 
 // todo-Move these out?

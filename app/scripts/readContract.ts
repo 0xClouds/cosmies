@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { createPublicClient, http } = require("viem");
 const { sepolia } = require("viem/chains");
 const StatGeneratorAbi = require("./abis/StatGenerator.json");
