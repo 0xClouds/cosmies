@@ -1,12 +1,10 @@
 "use client";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useWallets } from "@privy-io/react-auth";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
-import styles from "../../styles/RotatingBox.module.scss";
+import { useEffect } from "react";
 import RotatingBox from "../ui/rotatingBox";
-import { platform } from "os";
 
 //todo-Move these out?
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL as string) || "";
@@ -46,15 +44,11 @@ export default function Page() {
   }, []);
 
   return (
-    <Suspense>
-      <div>
-        <h1>The winner is...{wallets[0].address}</h1>
-        <RotatingBox
-          title="Congrats you won!"
-          footer="Keep on going!"
-        ></RotatingBox>
-        ;
-      </div>
-    </Suspense>
+    <div>
+      <RotatingBox
+        title={"Congrats " + wallet + " you won!"}
+        footer="Keep on going!"
+      ></RotatingBox>
+    </div>
   );
 }

@@ -20,8 +20,6 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("im here");
-
     const handleInserts = async (payload: any) => {
       //Listen to table
       console.log("Change received!", payload);
@@ -33,14 +31,15 @@ export default function Page() {
         players.data.sort((a: any, b: any) => a.created_at - b.created_at);
         const oldestPlayerName = players.data[0].public_address;
         const currentPlayer = wallets[0].address;
+        const player1State = Math.random() < 0.5;
         if (oldestPlayerName != currentPlayer) {
           const result = await axios.post("/api/battle", {
-            player1: oldestPlayerName,
-            player2: currentPlayer,
+            player1: currentPlayer,
+            player2: oldestPlayerName,
           });
-          console.log("the result", result);
+
           router.push(
-            `/gameRoom?name=${encodeURIComponent(result.data.roomName)}`
+            `/gameRoom?name=${encodeURIComponent(result.data.roomName)}&currentPlayer=${encodeURIComponent(currentPlayer)}&start=${encodeURIComponent(player1State.toString())}}`
           );
         }
       }
@@ -54,7 +53,6 @@ export default function Page() {
         battle?.opponent === wallets[0].address ||
         battle?.player === wallets[0].address
       ) {
-        console.log("I pushed");
         router.push(`/gameRoom?name=${encodeURIComponent(battle.roomName)}`);
       }
     };
