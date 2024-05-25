@@ -1,4 +1,5 @@
 import styles from "../../styles/HomeDesktop.module.scss";
+import stylesButton from "../../styles/Button.module.scss";
 import Navbar from "./navbar";
 //import Button from "./button";
 import Footer from "./footer";
@@ -46,50 +47,44 @@ const HomeDesktop: React.FC = () => {
             Crash landing on earth, these creatures spread around the globe
             looking for Adventurers to guide them.
           </p>
-          <div className={styles.button}>
+          <div
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
             <button
-              className={styles.button}
+              className={stylesButton.button}
               onMouseEnter={() => setColor(true)}
               onMouseLeave={() => setColor(false)}
-              onClick={login}
+              onClick={() => {
+                console.log("Connect here to mint a cosmie");
+              }}
             >
-              Click Here to Play A Game
-              <span className={styles.rightArrow}>
-                <ArrowRight fill={color ? "green" : "blue"} />
+              Mint Here
+              <span className={styles.leftArrow}>
+                <ArrowRight fill={color ? "orange" : "blue"} />
               </span>
             </button>
-            <div style={{ marginTop: "20px" }}>
-              <button
-                onMouseEnter={() => setColor(true)}
-                onMouseLeave={() => setColor(false)}
-                onClick={() => {
-                  console.log("Connect here to mint a cosmie");
-                }}
-              >
-                Mint Here
-                <span className={styles.leftArrow}>
-                  <ArrowRight fill={color ? "orange" : "white"} />
-                </span>
-              </button>
-            </div>
-            <div style={{ marginTop: "20px" }}>
-              <button
-                onMouseEnter={() => setColor(true)}
-                onMouseLeave={() => setColor(false)}
-                onClick={handlePlayGame}
-              >
-                Play a Game
-                <span className={styles.leftArrow}>
-                  <ArrowRight fill={color ? "green" : "black"} />
-                </span>
-              </button>
-            </div>
+            <button
+              className={stylesButton.button}
+              onMouseEnter={() => setColor(true)}
+              onMouseLeave={() => setColor(false)}
+              onClick={handlePlayGame}
+            >
+              Play a Game
+              <span className={styles.leftArrow}>
+                <ArrowRight fill={color ? "green" : "black"} />
+              </span>
+            </button>
           </div>
         </div>
-        {/* <div className={styles.footer}>
+      </div>
+      {/* <div className={styles.footer}>
           <Footer />
         </div> */}
-      </div>
     </div>
   );
 };
