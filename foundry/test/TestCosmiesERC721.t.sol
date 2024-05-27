@@ -17,7 +17,7 @@ function setUp() public {
     CosmiesContract.safeMint{value: 0.05 ether}();
 }
 function testFail_Burning_NoApproval() public {
-    //Stop Player hoax temporarily because no prior calls are made;
+    //Stop Player hoax temporarily because no prior calls are made
     vm.stopPrank();
 
     assertEq(
