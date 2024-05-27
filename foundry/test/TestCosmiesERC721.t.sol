@@ -1,36 +1,45 @@
-//SPDX-License-Identifier:MIT
+//SPDX-License-Identifer:MIT
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 import {COSMIES721} from "../src/COSMIES721.sol";
 
-contract CosmiesERC721Test is Test{
+contract TestCosmiesERC721 is Test{ 
  COSMIES721 CosmiesContract;
  address owner = makeAddr("cloud");
-    function setUp() public {
-        startHoax(owner, 1 ether);
-        CosmiesContract = new COSMIES721();
-        CosmiesContract.safeMint{value: 0.05 ether}(msg.sender);
-    }
+ address player = makeAddr('player1');
 
-    function test_BaseURI() public {
-        CosmiesContract.setBaseURI("http://www.test.com/");
-        assertEq(CosmiesContract.tokenURI(0), "http://www.test.com/0");
-    }
-
-    function testFail_BaseURI_notOwner()public{
-        vm.startPrank(address(69));
-        CosmiesContract.setBaseURI("http://www.test.com/");
-        vm.stopPrank();
-    }
-
-    function test_withdraw() public {
-        uint256 pastBalance = address(owner).balance;
-        CosmiesContract.withdraw();
-        assertEq(address(owner).balance, pastBalance + 0.05 ether);
-    }
-    
-
-
-  
+function setUp() public {
+    startHoax(owner, 10 ether);
+    CosmiesContract = new COSMIES721();
+    vm.stopPrank();
+    startHoax(player, 10 ether);
+    CosmiesContract.safeMint{value: 0.05 ether}();
 }
+function testFail_Burning_NoApproval() public {
+    //Stop Player hoax temporarily because no prior calls are made
+    vm.stopPrank();
+
+    assertEq(
+        CosmiesContract.balanceOf(player), 1
+    );
+    vm.startPrank(owner);
+    CosmiesContract.burn(0);
+    assertEq(CosmiesContract.balanceOf(player), 0);
+    vm.stopPrank();
+}
+
+function testFail_Burning_NotOwner() public {
+    assertEq(CosmiesContract.balanceOf(player),1);
+    CosmiesContract.burn(0);
+}
+
+function test_Burning() public {
+    CosmiesContract.setApprovalForAll(owner, true);
+    vm.startPrank(owner);
+    CosmiesContract.burn(0);
+    vm.stopPrank();
+}
+
+}
+

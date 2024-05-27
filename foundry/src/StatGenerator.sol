@@ -13,28 +13,24 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
 contract StatGenerator is VRFConsumerBaseV2Plus {
     event RequestSubmitted(uint256 requestId, uint256 numWords);
     event RequestFullfilled(uint256 requestId, uint256[] randomWords);
-    //Subscription ID from chainlink subscription service
-    uint256 s_subscriptionId;
-    //Maxium gas price
-    bytes32 keyHash;
-    //Maxium units of gas
-    uint32 callbackGasLimit = 1000000;
-    uint16 requestConfirmations = 3;
-    // Total number of requested random numbers
-    uint32 numWords = 5;
+    
     IVRFCoordinatorV2Plus COORDINATOR;
+    
+    uint256 private s_subscriptionId;
+    bytes32 private keyHash;
+    uint32 private callbackGasLimit = 1000000;
+    uint16 private requestConfirmations = 3;
+    uint32 private numWords = 5;
+   
+    uint256[] public requestIds;
+    uint256 public lastRequestId;
 
-    // a request struct
     struct RequestStatus {
         bool fulfilled;
         bool exists;
         uint256[] randomWords;
     }
 
-    uint256[] public requestIds;
-    uint256 public lastRequestId;
-
-    //store our request..
     mapping(uint256 requestId => RequestStatus) public s_request;
 
     constructor(
