@@ -6,6 +6,14 @@ import {ERC721Burnable} from "@openzeppelin/token/ERC721/extensions/ERC721Burnab
 import {Ownable} from "@openzeppelin/access/Ownable.sol";
 
 
+/**
+ * @title Cosmies ERC721 Contract
+ * @author Clouds
+ * @notice Mint & Burn Cosmies NFT 
+ */
+
+
+
 contract COSMIES721 is ERC721, ERC721URIStorage, Ownable, ERC721Burnable {
     error AMOUNT_SENT_INSUFFICIENT();
     error MAX_AMOUNT_OF_COSMIES_MINTED();
@@ -40,7 +48,7 @@ contract COSMIES721 is ERC721, ERC721URIStorage, Ownable, ERC721Burnable {
         _safeMint(msg.sender, _tokenId);
     }
 
-    function burn(uint256 _tokenId) public override  onlyOwner() {
+    function burn(uint256 _tokenId) public override onlyOwner() {
         _update(address(0), _tokenId, owner());
     }
 
@@ -50,9 +58,6 @@ contract COSMIES721 is ERC721, ERC721URIStorage, Ownable, ERC721Burnable {
         (bool s,) = owner.call{value: balance}("");
         require(s, "Failed to withdraw ether");
         }
-
-        
-
 
     function tokenURI(
         uint256 _tokenId

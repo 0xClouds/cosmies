@@ -10,18 +10,19 @@ import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/V
  * @notice Generate stats for each Cosmie at mint time. Leveraging Chainlink VRF we generate random stats within the specified paramters of each Cosmie.
  */
 
-contract StatGenerator is VRFConsumerBaseV2Plus {
+contract Dice is VRFConsumerBaseV2Plus {
     event RequestSubmitted(uint256 requestId, uint256 numWords);
     event RequestFullfilled(uint256 requestId, uint256[] randomWords);
     
     IVRFCoordinatorV2Plus COORDINATOR;
-    
+
     uint256 private s_subscriptionId;
     bytes32 private keyHash;
+    uint32 private numWords;
+    uint32 private modulo;
     uint32 private callbackGasLimit = 1000000;
     uint16 private requestConfirmations = 3;
-    uint32 private numWords = 5;
-   
+
     uint256[] public requestIds;
     uint256 public lastRequestId;
 
@@ -31,16 +32,21 @@ contract StatGenerator is VRFConsumerBaseV2Plus {
         uint256[] randomWords;
     }
 
+
     mapping(uint256 requestId => RequestStatus) public s_request;
 
     constructor(
         uint256 _subscriptionId,
         address _coordinatorAddress,
-        bytes32 _keyHash
+        bytes32 _keyHash,
+        uint32 _numWords,
+        uint32 _modulo
     ) VRFConsumerBaseV2Plus(_coordinatorAddress) {
         s_subscriptionId = _subscriptionId;
         keyHash = _keyHash;
         COORDINATOR = IVRFCoordinatorV2Plus(_coordinatorAddress);
+        numWords = _numWords;
+        modulo = _modulo;
     }
 
     function requestRandomWords()
@@ -77,7 +83,7 @@ contract StatGenerator is VRFConsumerBaseV2Plus {
     ) internal override {
         require(s_request[_requestId].exists, "request not found");
         for (uint8 i = 0; i < numWords; ) {
-            _randomWords[i] = (_randomWords[i] % 20) + 1;
+            _randomWords[i] = (_randomWords[i] % modulo) + 1;
             unchecked {
                 i++;
             }
