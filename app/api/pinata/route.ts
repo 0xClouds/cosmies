@@ -1,5 +1,5 @@
 import EventListener from "@/services/eventListener";
-import { WalletClient } from "viem";
+import internalWalletClient from "@/services/WalletClient";
 
 const BASE_URL = "https://azure-personal-mandrill-542.mypinata.cloud/ipfs/";
 
@@ -17,10 +17,6 @@ interface Cosmie {
   name: string;
   hash: string;
 }
-
-const account = privateKeyToAccount(
-  "0x991beed2a6b9defd7fc9b086c5376db6b4881dae2852d8653fc115a1253c64c8"
-);
 
 const cosmies: Cosmie = [
   { name: "Saburaku", hash: "QmUGVBKkGfm7p5AzKePsW632cd4UJD82LGWzz7e9PFJLNy" },
