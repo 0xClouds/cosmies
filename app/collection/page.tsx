@@ -46,7 +46,6 @@ export default function CollectionPage() {
                 blurDataURL={data}
                 objectFit="cover"
               />
-              {loading && <div>Loading...</div>}
             </div>
             <div className={styles.names}>
               <span>{image.name}</span>

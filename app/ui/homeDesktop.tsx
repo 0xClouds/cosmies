@@ -38,9 +38,9 @@ const HomeDesktop: React.FC = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.mainInfo}>
-        <div className={styles.nav}>
+        {/* <div className={styles.nav}>
           <Navbar currentPage="home" />
-        </div>
+        </div> */}
         <div className={styles.infoContainer}>
           <h1 className={styles.infoHeader}>Cosmies</h1>
           <p className={styles.infoText}>
@@ -60,7 +60,7 @@ const HomeDesktop: React.FC = () => {
               onMouseEnter={() => setColor(true)}
               onMouseLeave={() => setColor(false)}
               onClick={() => {
-                console.log("Connect here to mint a cosmie");
+                router.push("/mint");
               }}
             >
               Mint Here

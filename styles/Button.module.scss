@@ -2,6 +2,8 @@
 
 .button {
   background-color: #fff;
+  display: flex;
+  justify-content: space-between;
   width: 200px;
   padding: 1rem 1.25rem;
   font-size: 0.7rem;
