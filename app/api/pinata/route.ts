@@ -39,5 +39,18 @@ export async function POST(req: Request, res: Response) {
     console.log(e);
   }
 
-  return Response.json("Helloo");
+  const eventListener = new EventListener(
+    "0x37614fa040aF4D6508b4Bf3ba471ACF65a7940fe"
+  );
+
+  try {
+    const eventData = await eventListener.getEventPromise();
+    // Do something with the event data
+    console.log("Event received:", eventData);
+
+    return new Response("hello", { status: 200 });
+  } catch (e) {
+    console.log(e);
+    return new Response("Error processing event", { status: 500 });
+  }
 }
