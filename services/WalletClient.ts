@@ -17,4 +17,4 @@ const PublicClient = createPublicClient({
   chain: sepolia,
   transport: http,
 });
-export default internalWalletClient;
+export { internalWalletClient, PublicClient };
