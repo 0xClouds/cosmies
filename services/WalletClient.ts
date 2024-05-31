@@ -1,5 +1,4 @@
-import { create } from "domain";
-import { createWalletClient, custom, createPublicClient } from "viem";
+import { createWalletClient, custom, createPublicClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 
@@ -10,11 +9,11 @@ const account = privateKeyToAccount(process.env.PRIVATE_KEY as EthereumAddress);
 const internalWalletClient = createWalletClient({
   account,
   chain: sepolia,
-  transport: custom(window.ethereum),
+  transport: http(),
 });
 
 const PublicClient = createPublicClient({
   chain: sepolia,
-  transport: http,
+  transport: http(),
 });
 export { internalWalletClient, PublicClient };

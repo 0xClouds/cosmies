@@ -1,5 +1,6 @@
 import EventListener from "@/services/eventListener";
-import internalWalletClient from "@/services/WalletClient";
+import { PublicClient, internalWalletClient } from "@/services/WalletClient";
+import StatGeneratorAbi from "../../../data/abis/StatGeneratorAbi.json";
 
 const BASE_URL = "https://azure-personal-mandrill-542.mypinata.cloud/ipfs/";
 
@@ -28,9 +29,15 @@ const cosmies: Cosmie = [
 export async function POST(req: Request, res: Response) {
   const { name } = await req.json();
 
-  const eventListener = new EventListener(
-    "0x37614fa040aF4D6508b4Bf3ba471ACF65a7940fe"
-  );
+  try {
+    await internalWalletClient.writeContract({
+      address: "0x37614fa040aF4D6508b4Bf3ba471ACF65a7940fe",
+      abi: StatGeneratorAbi,
+      functionName: "requestRandomWords",
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   return Response.json("Helloo");
 }
