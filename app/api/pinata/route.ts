@@ -1,4 +1,6 @@
 import EventListener from "@/services/eventListener";
+import { WalletClient } from "viem";
+
 const BASE_URL = "https://azure-personal-mandrill-542.mypinata.cloud/ipfs/";
 
 /**
@@ -16,6 +18,10 @@ interface Cosmie {
   hash: string;
 }
 
+const account = privateKeyToAccount(
+  "0x991beed2a6b9defd7fc9b086c5376db6b4881dae2852d8653fc115a1253c64c8"
+);
+
 const cosmies: Cosmie = [
   { name: "Saburaku", hash: "QmUGVBKkGfm7p5AzKePsW632cd4UJD82LGWzz7e9PFJLNy" },
   { name: "Jambi", hash: "QmdvJdWj2zJZXpLaTK2crpjftzTBa7emdeQdqyKp3co9BW" },
@@ -25,6 +31,10 @@ const cosmies: Cosmie = [
 
 export async function POST(req: Request, res: Response) {
   const { name } = await req.json();
-  console.log(name);
+
+  const eventListener = new EventListener(
+    "0x37614fa040aF4D6508b4Bf3ba471ACF65a7940fe"
+  );
+
   return Response.json("Helloo");
 }
