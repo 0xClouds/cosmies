@@ -9,6 +9,7 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SmartAccountClientProvider } from "./contexts/SmartAccountClientContext";
 import Navbar from "./ui/navbar";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
+  const showNavbar = pathname === "/home" || pathname === "/mint";
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -46,7 +50,7 @@ export default function RootLayout({
           >
             <QueryClientProvider client={queryClient}>
               <SmartAccountClientProvider>
-                <Navbar currentPage="home" />
+                {showNavbar && <Navbar currentPage="home" />}
                 {children}
               </SmartAccountClientProvider>
             </QueryClientProvider>

@@ -4,3 +4,6 @@ out = "out"
 libs = ["lib"]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
+[etherscan]
+sepolia = { key = "6KXYKUE7YZN6UN9Y8YW26I17G9NP5MCNCY" , chain = "sepolia" }
