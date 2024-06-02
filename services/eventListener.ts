@@ -46,6 +46,7 @@ class EventListener {
         };
 
         this.resolve(data);
+        this.unwatch();
       } catch (e) {
         console.error("processing error:", e);
       }

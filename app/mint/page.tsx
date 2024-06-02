@@ -1,20 +1,30 @@
 "use client";
 import Image from "next/image";
 import { images } from "../ui/images";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import EventListener from "@/services/eventListener";
+
+const starters = ["Jambi", "Grassol", "Glacepom", "Saburaku"];
+const filteredData = images.filter((cosmie) => {
+  return starters.includes(cosmie.name);
+});
 
 export default function Page() {
-  const starters = ["Jambi", "Grassol", "Glacepom", "Saburaku"];
-  const filteredData = images.filter((cosmie) => {
-    return starters.includes(cosmie.name);
-  });
-
   const handleClick = async (cosmieName: string) => {
-    const response = await axios.post("/api/pinata", {
-      name: cosmieName,
-    });
+    try {
+      const vrfResponse = await axios.post("/api/mint/vrf", {
+        name: cosmieName,
+      });
 
-    console.log(await response);
+      const eventListner = new EventListener(
+        "0x32abb4d02235f6ff026f6b2a0849d56f6fdba028"
+      );
+
+      const data = await eventListner.getEventPromise();
+    } catch (e) {
+      throw e;
+    }
   };
 
   return (
