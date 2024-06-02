@@ -32,7 +32,6 @@ export default function Page() {
   const defenseAmountRef = useRef(defenseAmount);
   const evadeAmountRef = useRef(evadeAmount);
   const [currentTurn, setCurrentTurn] = useState(false);
-
   const isSubscribed = useRef(false);
   const room = useRef(supabase.channel(roomName!)).current;
 
@@ -56,7 +55,6 @@ export default function Page() {
       try {
         const isCurrentTurn =
           wallet === playerPassedIn ? startPosition : !startPosition;
-
         setCurrentTurn(isCurrentTurn);
       } catch (error) {
         console.error("Failed to decrypt data:", error);

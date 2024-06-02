@@ -20,7 +20,7 @@ contract Dice is VRFConsumerBaseV2Plus {
     bytes32 private keyHash;
     uint32 private numWords;
     uint32 private modulo;
-    uint32 private callbackGasLimit = 1000000;
+    uint32 private callbackGasLimit = 2500000;
     uint16 private requestConfirmations = 3;
 
     uint256[] public requestIds;

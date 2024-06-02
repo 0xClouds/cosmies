@@ -29,7 +29,6 @@ class EventListener {
 
   private handleLogs(logs: any) {
     let log = logs[0];
-    console.log(log);
     if (log.eventName === "RequestFullfilled") {
       const randomWords = logs[0].args.randomWords;
       let tempArr: number[] = [];

@@ -44,7 +44,11 @@ const cosmiesUpscore: Record<Cosmie, Record<Stat, number>> = {
   },
 };
 
-export function getDiceRoll(player: Cosmie, action: Stat): number {
+export function getDiceRoll(
+  player: Cosmie,
+  action: Stat,
+  randomNumbers: Array<number>
+): number {
   const lowerCasePlayer = player.toLowerCase() as Cosmie;
 
   //to account for specialMoves
@@ -54,18 +58,17 @@ export function getDiceRoll(player: Cosmie, action: Stat): number {
       : "specialMove";
 
   const amount = cosmiesUpscore[lowerCasePlayer][validAction];
-  const randomNumber = Math.floor(Math.random() * 10) + 1;
+  const randomNumberChoice = Math.floor(Math.random() * randomNumbers.length);
+  const randomNumber = randomNumbers[randomNumberChoice];
   const finalValue = randomNumber + amount;
   return finalValue;
 }
 
-//treating defense as defense - attack
 export function attackOnDefense(defense: number, attack: number): number {
   const result = attack - defense;
   return result > 0 ? result : 0;
 }
 
-//treating defense as defense - attack
 export function attackOnEvade(evade: number, attack: number): number {
   const result = Math.floor(attack / evade);
   return result;

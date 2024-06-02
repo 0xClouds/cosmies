@@ -1,10 +1,11 @@
 import styles from "../../styles/GameRoom.module.scss";
 import stylesButton from "../../styles/Button.module.scss";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
 
 import { getDiceRoll, Cosmie, Stat } from "../gameRoom/gameEngine";
+import axios from "axios";
 
 interface GameRoomProps {
   roomName: string | null;
@@ -32,7 +33,9 @@ const GameRoom: React.FC<GameRoomProps> = ({
   defense,
 }) => {
   const [color, setColor] = useState(false);
+  const [randomNumbers, setRandomNumber] = useState([]);
   const player = "jambi" as Cosmie;
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
   const cosmieActions: Record<Cosmie, Array<String>> = {
     jambi: ["Tackle", "Evade", "Shield", "Ice Punch"],
@@ -40,6 +43,20 @@ const GameRoom: React.FC<GameRoomProps> = ({
     suburaku: ["Tackle", "Evade", "Shield", "Dark Bite"],
     grassol: ["Tackle", "Evade", "Shield", "Vine Whip"],
   };
+
+  useEffect(() => {
+    const getRandomNumbers = async () => {
+      try {
+        const response = await axios.get("/api/dice");
+        setRandomNumber(response.data); // Assuming response.data contains the numbers you need
+        setIsLoading(false); // Set loading to false after data is fetched
+      } catch (e) {
+        console.log("Dice Roll Failed", e);
+        setIsLoading(false); // Ensure loading is set to false even if there's an error
+      }
+    };
+    getRandomNumbers();
+  }, []);
 
   // Map the actions to valid Stat values
   //typescript bullshit
@@ -58,15 +75,29 @@ const GameRoom: React.FC<GameRoomProps> = ({
   );
 
   function actionClick(player: Cosmie, action: Stat) {
-    const attackAmount = getDiceRoll(player, action);
+    const attackAmount = getDiceRoll(player, action, randomNumbers);
     setAttackType(action);
     setAttackAmount(attackAmount);
+  }
+
+  if (isLoading) {
+    return (
+      <div className={styles.mainContainer}>
+        <div className={styles.background}></div>
+        <div className={styles.playerInformation}>
+          <h1>IT IS MATCH TIME</h1>
+          <h1>Battle Room</h1>
+          {roomName && <p>Room ID: {roomName}</p>}
+          <h3>Please wait while we use chainlink VFR...</h3>;
+        </div>
+      </div>
+    );
   }
 
   return (
     <Suspense>
       <div className={styles.mainContainer}>
-        <div className={styles.background}></div> {/* Background div */}
+        <div className={styles.background}></div>
         <div className={styles.playerInformation}>
           <h1>IT IS MATCH TIME</h1>
           <h1>Battle Room</h1>
