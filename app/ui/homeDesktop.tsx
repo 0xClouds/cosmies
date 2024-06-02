@@ -8,9 +8,6 @@ import { useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { internalWalletClient } from "@/services/WalletClient";
-import { ABI } from "./abi";
-import EventListener from "@/services/eventListener";
 
 // Assuming Navbar and Button are typed in their respective files
 const HomeDesktop: React.FC = () => {
