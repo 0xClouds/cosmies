@@ -1,7 +1,3 @@
-import EventListener from "@/services/eventListener";
-import { PublicClient, internalWalletClient } from "@/services/WalletClient";
-import StatGeneratorAbi from "@/data/abis/StatGeneratorAbi.json";
-
 const BASE_URL = "https://azure-personal-mandrill-542.mypinata.cloud/ipfs/";
 
 interface BaseStats {
