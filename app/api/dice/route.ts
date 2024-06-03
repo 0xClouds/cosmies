@@ -1,10 +1,12 @@
 import { ABI } from "./diceABI";
 import { internalWalletClient } from "@/services/WalletClient";
 
+type EthereumAddress = `0x${string}`;
+
 async function getDiceRolls() {
   try {
     await internalWalletClient.writeContract({
-      address: "0xc975b9ff3178dBCb1918d32eE73E03D4f6aeB92B",
+      address: "0xc975b9ff3178dBCb1918d32eE73E03D4f6aeB92B" as EthereumAddress,
       abi: ABI,
       functionName: "requestRandomWords",
     });
