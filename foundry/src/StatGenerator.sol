@@ -18,7 +18,7 @@ contract StatGenerator is VRFConsumerBaseV2Plus {
     
     uint256 private s_subscriptionId;
     bytes32 private keyHash;
-    uint32 private callbackGasLimit = 1000000;
+    uint32 private callbackGasLimit = 2500000;
     uint16 private requestConfirmations = 3;
     uint32 private numWords = 5;
    

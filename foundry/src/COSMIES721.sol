@@ -35,7 +35,7 @@ contract COSMIES721 is ERC721, ERC721URIStorage, Ownable, ERC721Burnable {
         return baseURI;
     }
 
-    function safeMint() public payable {
+    function safeMint(string memory _tokenURI) public payable {
         if(msg.value < 0.05 ether){
             revert AMOUNT_SENT_INSUFFICIENT();
         }
@@ -46,6 +46,7 @@ contract COSMIES721 is ERC721, ERC721URIStorage, Ownable, ERC721Burnable {
 
         uint256 _tokenId = _nextTokenId++;
         _safeMint(msg.sender, _tokenId);
+        _setTokenURI(_tokenId, _tokenURI);
     }
 
     function burn(uint256 _tokenId) public override onlyOwner() {

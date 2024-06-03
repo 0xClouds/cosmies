@@ -1,0 +1,15 @@
+import { internalWalletClient } from "@/services/WalletClient";
+import StatGeneratorAbi from "@/data/abis/StatGeneratorAbi.json";
+
+export async function POST(req: Request) {
+  try {
+    await internalWalletClient.writeContract({
+      address: "0x32abb4d02235f6ff026f6b2a0849d56f6fdba028",
+      abi: StatGeneratorAbi,
+      functionName: "requestRandomWords",
+    });
+    return new Response("Succesful!", { status: 200 });
+  } catch (e) {
+    console.log(e);
+  }
+}
