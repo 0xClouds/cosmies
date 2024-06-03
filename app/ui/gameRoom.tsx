@@ -100,7 +100,7 @@ const GameRoom: React.FC<GameRoomProps> = ({
             <button
               className={stylesButton.button}
               key={index}
-              onClick={() => actionClick(player, action)}
+              onClick={() => actionClick(player!, action)}
               disabled={!currentTurn}
             >
               {action}
