@@ -8,6 +8,7 @@ export async function POST(req: Request) {
   const { ipfsHash } = await req.json();
   try {
     await internalWalletClient.writeContract({
+      //@ts-ignore
       address: "0xd127262169333a1Bc3Ff01755CbbE22d06F293de" as EthereumAddress,
       abi: CosmieERC721,
       functionName: "safeMint",

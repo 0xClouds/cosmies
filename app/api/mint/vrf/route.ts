@@ -6,6 +6,7 @@ export async function POST(req: Request) {
   console.log("You called me!!");
   try {
     await internalWalletClient.writeContract({
+      //@ts-ignore
       address: "0x32abb4d02235f6ff026f6b2a0849d56f6fdba028" as EthereumAddress,
       abi: StatGeneratorAbi,
       functionName: "requestRandomWords",
