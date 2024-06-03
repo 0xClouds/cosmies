@@ -21,7 +21,7 @@ export default function Page() {
   const roomName = searchParams.get("name");
   const playerPassedIn = searchParams.get("currentPlayer");
   const startPosition = searchParams.get("start") === "true";
-
+  const [randomNumbers, setRandomNumber] = useState([]);
   const [wallet, setWallet] = useState<string>("");
   const [lifeAmount, setLifeAmount] = useState(100);
   const [enemyLife, setEnemyLife] = useState(100);
@@ -34,6 +34,7 @@ export default function Page() {
   const [currentTurn, setCurrentTurn] = useState(false);
   const isSubscribed = useRef(false);
   const room = useRef(supabase.channel(roomName!)).current;
+  const [isLoading, setIsLoading] = useState(false);
 
   const initializeWallet = useCallback(() => {
     if (wallets.length > 0 && wallets[0].address) {
@@ -49,6 +50,24 @@ export default function Page() {
   useEffect(() => {
     initializeWallet();
   }, [initializeWallet]);
+
+  useEffect(() => {
+    const getRandomNumbers = async () => {
+      try {
+        await axios.get("/api/dice");
+        const event = new EventListener(
+          "0xc975b9ff3178dBCb1918d32eE73E03D4f6aeB92B"
+        );
+        const data = await event.getEventPromise();
+        setRandomNumber(data.randomNumbers);
+        setIsLoading(false);
+      } catch (e) {
+        console.log("Dice Roll Failed", e);
+        setIsLoading(false); // Ensure loading is set to false even if there's an error
+      }
+    };
+    getRandomNumbers();
+  }, []);
 
   useEffect(() => {
     if (playerPassedIn) {
@@ -157,6 +176,19 @@ export default function Page() {
     }
   }, [lifeAmount, wallet, room]);
 
+  if (isLoading) {
+    return (
+      <div className={styles.mainContainer}>
+        <div className={styles.background}></div>
+        <div className={styles.playerInformation}>
+          <h1>IT IS MATCH TIME</h1>
+          <h1>Battle Room</h1>
+          <h3>Please wait while we use chainlink VFR...</h3>;
+        </div>
+      </div>
+    );
+  }
+
   return (
     <GameRoom
       roomName={roomName}
@@ -169,6 +201,7 @@ export default function Page() {
       enemyLife={enemyLife}
       currentTurn={currentTurn}
       defense={defenseAmount}
+      randomNumbers={randomNumbers}
     />
   );
 }
