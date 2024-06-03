@@ -7,6 +7,7 @@ type EthereumAddress = `0x${string}`;
 const account = privateKeyToAccount(process.env.PRIVATE_KEY as EthereumAddress);
 
 const internalWalletClient = createWalletClient({
+  //@ts-ignore
   account,
   chain: sepolia,
   transport: http(),
