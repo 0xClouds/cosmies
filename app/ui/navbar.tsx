@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
             Home
           </Link>
         </li>
-        <li
+        {/* <li
           className={`${styles.navItem} ${currentPage === "collection" ? styles.navPage : undefined}`}
         >
           <Link
@@ -42,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
           >
             Collection
           </Link>
-        </li>
+        </li> */}
       </ul>
       {/* Assuming TopButtons is a React component you might want to include. Uncomment if needed:
       <TopButtons />

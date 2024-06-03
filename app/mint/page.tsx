@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { images } from "../ui/images";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import axios from "axios";
 import EventListener from "@/services/eventListener";
 
@@ -12,7 +12,12 @@ const filteredData = images.filter((cosmie) => {
 
 export default function Page() {
   const [status, setStatus] = useState({ vrf: false, metadata: false });
-  const handleClick = async (cosmieName: string) => {
+  const [selectedCosmie, setSelectedCosmie] = useState("");
+  const handleClick = async (
+    e: FormEvent<HTMLFormElement>,
+    cosmieName: string
+  ) => {
+    e.preventDefault();
     try {
       const vrfResponse = await axios.post("/api/mint/vrf", {
         name: cosmieName,
@@ -45,22 +50,33 @@ export default function Page() {
       <h1 className="text-3xl ">
         Choose <span className="font-bold uppercase">your</span> Cosmie
       </h1>
-      <div className="flex gap-2 ">
-        {filteredData.map((cosmie) => (
-          <div
-            className="border border-1 border-black rounded-xl w-64 h-64 bg-blue-200 relative overflow-hidden hover:cursor-pointer"
-            key={cosmie.name}
-            onClick={() => handleClick(cosmie.name)}
-          >
-            <Image
-              className="hover:scale-150 rounded-xl transition-all"
-              src={cosmie.src}
-              alt={cosmie.description}
-              objectFit="contain"
-            ></Image>
-          </div>
-        ))}
-      </div>
+      <form
+        className="flex flex-col justify-center items-center gap-2"
+        onSubmit={(e) => handleClick(e, selectedCosmie)}
+      >
+        <div className="flex gap-2">
+          {filteredData.map((cosmie) => (
+            <div
+              className={`border border-1 border-black rounded-xl w-64 h-64 bg-blue-200 relative overflow-hidden hover:cursor-pointer ${cosmie.name === selectedCosmie ? "border-4 border-blue-500" : null}`}
+              key={cosmie.name}
+              onClick={() => setSelectedCosmie(cosmie.name)}
+            >
+              <Image
+                className="hover:scale-150 hover:cursor-pointer rounded-xl transition-all"
+                src={cosmie.src}
+                alt={cosmie.description}
+                objectFit="contain"
+              ></Image>
+            </div>
+          ))}
+        </div>
+        <button
+          className={`disabled:bg-slate-500 valid:bg-blue-500 w-1/6 text-white p-4 rounded-full hover:cursor-pointer`}
+          disabled={selectedCosmie.length < 1}
+        >
+          Mint Cosmie
+        </button>
+      </form>
     </main>
   );
 }
