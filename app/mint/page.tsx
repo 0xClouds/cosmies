@@ -11,17 +11,25 @@ const filteredData = images.filter((cosmie) => {
 });
 
 export default function Page() {
+  const [status, setStatus] = useState({ vrf: false, metadata: false });
   const handleClick = async (cosmieName: string) => {
     try {
       const vrfResponse = await axios.post("/api/mint/vrf", {
         name: cosmieName,
       });
 
+      console.log("vrf resposne", vrfResponse);
       const eventListner = new EventListener(
         "0x32abb4d02235f6ff026f6b2a0849d56f6fdba028"
       );
+      const eventData = await eventListner.getEventPromise();
 
-      const data = await eventListner.getEventPromise();
+      const pinataResponse = await axios.post("/api/mint/pinata", {
+        eventData: eventData,
+        name: cosmieName,
+      });
+
+      console.log("pinata response", pinataResponse);
     } catch (e) {
       throw e;
     }

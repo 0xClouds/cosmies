@@ -18,6 +18,8 @@ interface Cosmie {
   image: string;
   external_url: string;
   base_stats: BaseStats;
+  level: number;
+  experience: number;
 }
 
 const cosmies: Cosmie[] = [
@@ -34,6 +36,8 @@ const cosmies: Cosmie[] = [
       agility: 4,
       accuracy: 3,
     },
+    level: 1,
+    experience: 0,
   },
   {
     name: "Jambi",
@@ -48,6 +52,8 @@ const cosmies: Cosmie[] = [
       agility: 2,
       accuracy: 1,
     },
+    level: 1,
+    experience: 0,
   },
   {
     name: "Grassol",
@@ -62,6 +68,8 @@ const cosmies: Cosmie[] = [
       agility: 1,
       accuracy: 3,
     },
+    level: 1,
+    experience: 0,
   },
   {
     name: "Glacepom",
@@ -76,6 +84,8 @@ const cosmies: Cosmie[] = [
       agility: 3,
       accuracy: 1,
     },
+    level: 1,
+    experience: 0,
   },
 ];
 
@@ -97,7 +107,7 @@ const createMetadata = async (statsArray: number[], cosmieName: string) => {
         20
       );
     }
-    pinMetadataToIPFS(cosmie);
+    return await pinMetadataToIPFS(cosmie);
   }
 };
 
@@ -112,7 +122,9 @@ const pinMetadataToIPFS = async (cosmie: Cosmie) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: cosmie.name,
+        pinataMetadata: {
+          name: cosmie.name,
+        },
         pinataContent: { ...cosmie },
       }),
     };
@@ -122,58 +134,19 @@ const pinMetadataToIPFS = async (cosmie: Cosmie) => {
       options
     );
 
-    console.log(res);
+    const data = await res.json();
+    return data.IpfsHash;
   } catch (e) {
     throw e;
   }
 };
 
-export async function POST(
-  req: Request,
-  { params }: { params: { slug: string } }
-) {
-  const { name } = await req.json();
-  const slug = params.slug;
-
-  if (slug === "vrf") {
-    console.log("---- request started ----");
-
-    try {
-      await internalWalletClient.writeContract({
-        address: "0x32abb4d02235f6ff026f6b2a0849d56f6fdba028",
-        abi: StatGeneratorAbi,
-        functionName: "requestRandomWords",
-      });
-    } catch (e) {
-      console.log(e);
-    }
-
-    console.log("VRF Submittied");
-
-    return new Response("Succesful!", { status: 200 });
-  }
-
-  if (slug === "metadata") {
-    try {
-      const eventData = await eventListener.getEventPromise();
-      createMetadata(eventData.randomWords, name);
-
-      return new Response("Succesful!", { status: 200 });
-    } catch (e) {
-      console.log(e);
-      return new Response("Error processing event", { status: 500 });
-    }
-  }
-
-  // const eventListener = new EventListener(
-  //   "0x37614fa040aF4D6508b4Bf3ba471ACF65a7940fe"
-  // );
-
+export async function POST(req: Request) {
+  const { eventData, name } = await req.json();
   try {
-    const eventData = await eventListener.getEventPromise();
-    createMetadata(eventData.randomWords, name);
-
-    return new Response("Succesful!", { status: 200 });
+    const ipfsHash = await createMetadata(eventData.randomWords, name);
+    console.log("the ipfs Hash", ipfsHash);
+    return new Response(ipfsHash, { status: 200 });
   } catch (e) {
     console.log(e);
     return new Response("Error processing event", { status: 500 });
