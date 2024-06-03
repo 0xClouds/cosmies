@@ -28,8 +28,13 @@ export default function Page() {
         eventData: eventData,
         name: cosmieName,
       });
+      console.log("pinata response", pinataResponse.data);
 
-      console.log("pinata response", pinataResponse);
+      const mintResponse = await axios.post("/api/mint/erc721", {
+        ipfsHash: pinataResponse.data,
+      });
+
+      console.log(mintResponse);
     } catch (e) {
       throw e;
     }
