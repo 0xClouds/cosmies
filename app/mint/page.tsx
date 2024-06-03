@@ -13,11 +13,14 @@ const filteredData = images.filter((cosmie) => {
 export default function Page() {
   const [status, setStatus] = useState({ vrf: false, metadata: false });
   const [selectedCosmie, setSelectedCosmie] = useState("");
+  const [minting, setMinting] = useState(false);
+
   const handleClick = async (
     e: FormEvent<HTMLFormElement>,
     cosmieName: string
   ) => {
     e.preventDefault();
+    setMinting(true);
     try {
       const vrfResponse = await axios.post("/api/mint/vrf", {
         name: cosmieName,
@@ -43,6 +46,7 @@ export default function Page() {
     } catch (e) {
       throw e;
     }
+    setMinting(false);
   };
 
   return (
@@ -74,7 +78,7 @@ export default function Page() {
           className={`disabled:bg-slate-500 valid:bg-blue-500 w-1/6 text-white p-4 rounded-full hover:cursor-pointer`}
           disabled={selectedCosmie.length < 1}
         >
-          Mint Cosmie
+          {minting ? "Minting..." : "Mint Cosmie"}
         </button>
       </form>
     </main>
