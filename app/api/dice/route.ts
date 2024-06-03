@@ -1,6 +1,5 @@
 import { ABI } from "./diceABI";
 import { internalWalletClient } from "@/services/WalletClient";
-import EventListener from "@/services/eventListener";
 
 async function getDiceRolls() {
   try {

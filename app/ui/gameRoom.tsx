@@ -1,11 +1,11 @@
 import styles from "../../styles/GameRoom.module.scss";
 import stylesButton from "../../styles/Button.module.scss";
-
 import { Suspense, useEffect, useState } from "react";
 import ArrowRight from "@/public/images/icons/arrow-right";
-
 import { getDiceRoll, Cosmie, Stat } from "../gameRoom/gameEngine";
-import axios from "axios";
+import { useWallets } from "@privy-io/react-auth";
+import AlchemyWrap from "@/services/getNFT";
+const { Alchemy, Network } = require("alchemy-sdk");
 
 interface GameRoomProps {
   roomName: string | null;
@@ -35,8 +35,17 @@ const GameRoom: React.FC<GameRoomProps> = ({
   randomNumbers,
 }) => {
   const [color, setColor] = useState(false);
+  const [player, setPlayer] = useState<Cosmie | null>(null); // Adjust the initial state type
+  const { wallets } = useWallets();
 
-  const player = "jambi" as Cosmie;
+  useEffect(() => {
+    const getPlayer = async () => {
+      const alwrap = new AlchemyWrap(wallets[0].address);
+      const player = (await alwrap.getNFT()) as Cosmie;
+      setPlayer(player!);
+    };
+    getPlayer();
+  }, []);
 
   const cosmieActions: Record<Cosmie, Array<String>> = {
     jambi: ["Tackle", "Evade", "Shield", "Ice Punch"],
@@ -57,9 +66,11 @@ const GameRoom: React.FC<GameRoomProps> = ({
     "Vine Whip": "specialMove",
   };
 
-  const actions: Array<Stat> = cosmieActions[player].map(
-    (action) => (actionMap[action as string] as Stat) || "specialMove"
-  );
+  const actions: Array<Stat> = player
+    ? cosmieActions[player].map(
+        (action) => actionMap[action as keyof typeof actionMap] as Stat
+      )
+    : [];
 
   function actionClick(player: Cosmie, action: Stat) {
     const attackAmount = getDiceRoll(player, action, randomNumbers);
